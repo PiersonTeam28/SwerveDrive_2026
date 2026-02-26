@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import frc.robot.generated.TunerConstants;
@@ -98,8 +99,6 @@ public class RobotContainer {
         
         configureBindings();
         autoRoutines.configure();
-
-
     }
 
     /**
@@ -113,7 +112,7 @@ public class RobotContainer {
      */
 
     private void configureBindings() {
-        configureManualDriveBindings();
+        //configureManualDriveBindings();
 
         limelight.setDefaultCommand(updateVisionCommand());
         // Note that X is defined as forward according to WPILib convention,
@@ -150,30 +149,27 @@ public class RobotContainer {
         joystick.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
         drivetrain.registerTelemetry(logger::telemeterize);
-        
-
-
-
 
         joystick1.y().onTrue(hood.positionCommand(1)).onFalse(hood.positionCommand(0.5));
         joystick1.a().onTrue(hood.positionCommand(0)).onFalse(hood.positionCommand(0.5));
 
+
     }
 
-    private void configureManualDriveBindings() {
-        final ManualDriveCommand manualDriveCommand = new ManualDriveCommand(
-            swerve, 
-            () -> -joystick.getLeftY(), 
-            () -> -joystick.getLeftX(), 
-            () -> -joystick.getRightX()
-        );
-        swerve.setDefaultCommand(manualDriveCommand);
-        joystick.a().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.k180deg)));
-        joystick.b().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kCW_90deg)));
-        joystick.x().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kCCW_90deg)));
-        joystick.y().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kZero)));
-        joystick.back().onTrue(Commands.runOnce(() -> manualDriveCommand.seedFieldCentric()));
-    }
+    // private void configureManualDriveBindings() {
+    //     final ManualDriveCommand manualDriveCommand = new ManualDriveCommand(
+    //         swerve, 
+    //         () -> -joystick.getLeftY(), 
+    //         () -> -joystick.getLeftX(), 
+    //         () -> -joystick.getRightX()
+    //     );
+    //     swerve.setDefaultCommand(manualDriveCommand);
+    //     joystick.a().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.k180deg)));
+    //     joystick.b().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kCW_90deg)));
+    //     joystick.x().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kCCW_90deg)));
+    //     joystick.y().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kZero)));
+    //     joystick.back().onTrue(Commands.runOnce(() -> manualDriveCommand.seedFieldCentric()));
+    // }
 
     private Command updateVisionCommand() {
         return limelight.run(() -> {

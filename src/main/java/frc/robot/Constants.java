@@ -38,25 +38,22 @@ public class Constants {
 
     // CAN IDS
     // TALON 
-    public static final int FRONT_RIGHT_DRIVE = 6;
-    public static final int REAR_RIGHT_DRIVE = 5;
-    public static final int FRONT_LEFT_DRIVE = 7;
-    public static final int REAR_LEFT_DRIVE = 12;
+    public static final int FRONT_RIGHT_DRIVE = 25;
+    public static final int REAR_RIGHT_DRIVE = 55;
+    public static final int FRONT_LEFT_DRIVE = 10;
+    public static final int REAR_LEFT_DRIVE = 40;
 
-    public static final int FRONT_LEFT_STEER = 8;
-    public static final int FRONT_RIGHT_STEER = 10;
-    public static final int REAR_LEFT_STEER = 9;
-    public static final int REAR_RIGHT_STEER = 11;
+    public static final int FRONT_LEFT_STEER = 22;
+    public static final int FRONT_RIGHT_STEER = 20;
+    public static final int REAR_LEFT_STEER = 35;
+    public static final int REAR_RIGHT_STEER = 50;
     
-    public static final int REAR_LEFT_ENCODER = 1;
-    public static final int FRONT_LEFT_ENCODER = 2;
-    public static final int FRONT_RIGHT_ENCODER = 3;
-    public static final int REAR_RIGHT_ENCODER = 4;
+    public static final int REAR_LEFT_ENCODER = 45;
+    public static final int FRONT_LEFT_ENCODER = 15;
+    public static final int FRONT_RIGHT_ENCODER = 30;
+    public static final int REAR_RIGHT_ENCODER = 60;
 
     public static final int PIGEONCAWWWWWWWWW = 13;
-
-
-
 
     //PORTS 
 
@@ -65,13 +62,13 @@ public class Constants {
     public static final CANBus kCANivoreCANBus = new CANBus("main");
 
     // Talon FX IDs
-    public static final int kIntakePivot = 10;
-    public static final int kIntakeRollers = 11;
+    public static final int kIntakePivot = 29;
+    public static final int kIntakeRollers = 5;
     public static final int kFloor = 12;
     public static final int kFeeder = 13;
-    public static final int kShooterLeft = 14;
-    public static final int kShooterMiddle = 15;
-    public static final int kShooterRight = 16;
-    public static final int kHanger = 18;
+    public static final int kShooterLeft = 11;
+    //public static final int kShooterMiddle = 15;
+    public static final int kShooterRight = 17;
+    public static final int kHanger = 28;
 
 }
