@@ -20,6 +20,21 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+
+//SPARK MAX IMPORTS
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.AbsoluteEncoderConfig;
+import com.revrobotics.spark.config.MAXMotionConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.encoder.*;
+import com.revrobotics.AbsoluteEncoder;
+import com.revrobotics.config.*;
+import com.revrobotics.spark.*;
+
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Voltage;
@@ -66,26 +81,104 @@ public class Intake extends SubsystemBase {
     }
 
     private static final double kPivotReduction = 50.0;
+    
     private static final AngularVelocity kMaxPivotSpeed = KrakenX60.kFreeSpeed.div(kPivotReduction);
+    private static final AngularVelocity kMaxPivotVelocity = Constants.kPivotRPM.div(kPivotReduction); //change from Kraken to vex 775 pro motor, GB Ratio 4:1
     private static final Angle kPositionTolerance = Degrees.of(5);
+
+    private static final double kAllowedError = 0.5;
+
+    private static final double kP = 0;
+    private static final double kI = 0;
+    private static final double kD = 0;
+    private static final double kS = 0;
+    private static final double kV = 0;
+    private static final double kA = 0;
+
+
+    private static final double kMaxPV = kMaxPivotVelocity.in(RPM); // to double?
+    private static final double kMaxPA = kMaxPivotVelocity.in(RotationsPerSecond); // to double?
 
     private final TalonFX pivotMotor, rollerMotor;
     private final VoltageOut pivotVoltageRequest = new VoltageOut(0);
     private final MotionMagicVoltage pivotMotionMagicRequest = new MotionMagicVoltage(0).withSlot(0);
     private final VoltageOut rollerVoltageRequest = new VoltageOut(0);
 
+    private final SparkMax pivot;
+    private final SparkClosedLoopController pivotController;
+    //private final AbsoluteEncoder pivotEncoder;
+    private final AbsoluteEncoderConfig pivotEncoderConfig;
+    //private final MAXMotionConfig maxMotionConfig;
+
+
+
+
+
+
+
     private boolean isHomed = false;
 
-    public Intake() {
-        pivotMotor = new TalonFX(Constants.kIntakePivot, Constants.kCANivoreCANBus);
+    private boolean invertPivot = false;
+
+    public Intake() {                               // PIVOT MOTOR IS A SPARKMAX MOTOR
+        
+        pivot = new SparkMax(Constants.kIntakePivot, MotorType.kBrushed); //SPARKMAX 29
+       
+        
+        pivotEncoderConfig = new AbsoluteEncoderConfig();
+
+
+       // maxMotionConfig = new MAXMotionConfig();
+
+        
+        pivotMotor = new TalonFX(Constants.kIntakePivot, Constants.kCANivoreCANBus); 
         rollerMotor = new TalonFX(Constants.kIntakeRollers, Constants.kRoboRioCANBus);
+        
         configurePivotMotor();
         configureRollerMotor();
+       
+        configureSparkMaxPivot();
+
+        pivotController = pivot.getClosedLoopController();
+       
         SmartDashboard.putData(this);
+    }
+
+    private void configureSparkMaxPivot() {
+        final SparkMaxConfig pivotConfig = new SparkMaxConfig();
+        
+        pivotConfig
+            .smartCurrentLimit(60)
+            .idleMode(IdleMode.kBrake)
+            .inverted(invertPivot);
+        
+        pivotConfig.absoluteEncoder.apply(pivotEncoderConfig);
+        
+        pivotConfig.closedLoop.maxMotion
+            .cruiseVelocity(kMaxPV, ClosedLoopSlot.kSlot0)
+            .maxAcceleration(kMaxPA, ClosedLoopSlot.kSlot0)
+            .allowedProfileError(kAllowedError, ClosedLoopSlot.kSlot0);
+
+        pivotConfig.closedLoop
+            .pid(kP, kI, kD, ClosedLoopSlot.kSlot0);
+
+        pivotConfig.closedLoop.feedForward
+            .kA(kA, ClosedLoopSlot.kSlot0)
+            .kS(kS, ClosedLoopSlot.kSlot0)
+            .kV(kV, ClosedLoopSlot.kSlot0);
+
+
+        
+       
+       
+        pivot.configure(pivotConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        
+
     }
 
     private void configurePivotMotor() {
         final TalonFXConfiguration config = new TalonFXConfiguration()
+        
             .withMotorOutput(
                 new MotorOutputConfigs()
                     .withInverted(InvertedValue.CounterClockwise_Positive)
@@ -135,12 +228,17 @@ public class Intake extends SubsystemBase {
         rollerMotor.getConfigurator().apply(config);
     }
 
+
+    // Checks if the pivot is within the position tolerance of the target position TALON
     private boolean isPositionWithinTolerance() {
         final Angle currentPosition = pivotMotor.getPosition().getValue();
+        //pivot.getAbsoluteEncoder().getPosition();
+       // pivotController.getMAXMotionSetpointPosition();
         final Angle targetPosition = pivotMotionMagicRequest.getPositionMeasure();
         return currentPosition.isNear(targetPosition, kPositionTolerance);
     }
 
+    // set pivot TALON percent output
     private void setPivotPercentOutput(double percentOutput) {
         pivotMotor.setControl(
             pivotVoltageRequest
@@ -148,6 +246,7 @@ public class Intake extends SubsystemBase {
         );
     }
 
+    // set pivot TALON to position
     public void set(Position position) {
         pivotMotor.setControl(
             pivotMotionMagicRequest
@@ -155,6 +254,8 @@ public class Intake extends SubsystemBase {
         );
     }
 
+
+    // set speed for roller TALON
     public void set(Speed speed) {
         rollerMotor.setControl(
             rollerVoltageRequest
@@ -162,6 +263,8 @@ public class Intake extends SubsystemBase {
         );
     }
 
+
+    // actual intake command 
     public Command intakeCommand() {
         return startEnd(
             () -> {
@@ -172,6 +275,8 @@ public class Intake extends SubsystemBase {
         );
     }
 
+
+    // agitiate command 
     public Command agitateCommand() {
         return runOnce(() -> set(Speed.INTAKE))
             .andThen(
@@ -189,6 +294,8 @@ public class Intake extends SubsystemBase {
             });
     }
 
+
+    // homing command 
     public Command homingCommand() {
         return Commands.sequence(
             runOnce(() -> setPivotPercentOutput(0.1)),

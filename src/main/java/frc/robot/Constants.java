@@ -22,6 +22,8 @@ public class Constants {
         public static final AngularVelocity kFreeSpeed = RPM.of(6000);
     }
 
+    public static final AngularVelocity kPivotRPM = RPM.of(6000);
+
     public static final double SLOW = 0.66;
 
     //public static final double INTAKE = 0.5;
@@ -65,7 +67,7 @@ public class Constants {
     public static final int kIntakePivot = 29;
     public static final int kIntakeRollers = 5;
     public static final int kFloor = 12;
-    public static final int kFeeder = 13;
+    public static final int kFeeder = 7;
     public static final int kShooterLeft = 11;
     //public static final int kShooterMiddle = 15;
     public static final int kShooterRight = 17;
