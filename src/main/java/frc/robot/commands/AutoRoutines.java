@@ -16,6 +16,7 @@ import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.subsystems.Feeder;
@@ -74,8 +75,21 @@ public final class AutoRoutines {
 
     public void configure() {
         autoChooser.addRoutine("Outpost and Depot", this::outpostAndDepotRoutine);
+        autoChooser.addRoutine("TEST", this::test);
         SmartDashboard.putData("Auto Chooser", autoChooser);
         RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
+    }
+
+    public AutoChooser getAutoChooser() {
+        return autoChooser;
+    }
+
+    public AutoFactory getAutoFactory() {
+        return autoFactory;
+    }
+
+    public Command getAutoCommand() {
+        return autoChooser.selectedCommand();
     }
 
     private AutoRoutine outpostAndDepotRoutine() {
@@ -126,7 +140,15 @@ public final class AutoRoutines {
         return routine;
     }
 
-    // public AutoRoutine test() {
-    //     final AutoRoutine routine = autoFactory.newRoutine("TEST");
-    // }
+    public AutoRoutine test() {
+        final AutoRoutine routine = autoFactory.newRoutine("TEST");
+        final AutoTrajectory testTrajectory = routine.trajectory("TEST");
+
+        routine.active().onTrue(
+            testTrajectory.resetOdometry()
+            .andThen(testTrajectory.cmd())
+        );
+
+        return routine;
+    }
 }

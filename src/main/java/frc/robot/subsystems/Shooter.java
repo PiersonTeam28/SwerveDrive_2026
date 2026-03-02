@@ -93,7 +93,7 @@ public class Shooter extends SubsystemBase {
         for (final TalonFX motor : motors) {
             motor.setControl(
                 voltageRequest
-                    .withOutput(Volts.of(percentOutput * 12.0 *0.66))
+                    .withOutput(Volts.of(percentOutput * 12.0 *0.4))
             );
         }
     }
