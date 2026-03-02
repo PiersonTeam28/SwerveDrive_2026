@@ -53,7 +53,7 @@ import frc.robot.Constants;
 public class Intake extends SubsystemBase {
     public enum Speed {
         STOP(0),
-        INTAKE(0.8);
+        INTAKE(0.4);
 
         private final double percentOutput;
 
@@ -220,7 +220,7 @@ public class Intake extends SubsystemBase {
             .withMotorOutput(
                 new MotorOutputConfigs()
                     .withInverted(InvertedValue.CounterClockwise_Positive)
-                    .withNeutralMode(NeutralModeValue.Brake)
+                    .withNeutralMode(NeutralModeValue.Coast)
             )
             .withCurrentLimits(
                 new CurrentLimitsConfigs()
@@ -272,6 +272,11 @@ public class Intake extends SubsystemBase {
         pivotController.setSetpoint(setpoint, SparkBase.ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
     }
 
+   
+    public void testSetPivotPercentOutput(double percentOutput) {
+        pivot.setVoltage(Volts.of(percentOutput * 12.0));
+    }
+
 
     // set speed for roller TALON
     public void set(Speed speed) {
@@ -281,6 +286,9 @@ public class Intake extends SubsystemBase {
         );
     }
 
+    public Command stopIntake() {
+        return runOnce(() -> set(Speed.STOP));
+    }
 
     // actual intake command 
     public Command intakeCommand() {
@@ -296,7 +304,7 @@ public class Intake extends SubsystemBase {
 
     public Command testIntake(DoubleSupplier speedSupplier) {
         return run(() -> {
-            set(speedSupplier.getAsDouble());
+            testSetPivotPercentOutput(speedSupplier.getAsDouble());
         });
     }
 

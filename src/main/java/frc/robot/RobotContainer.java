@@ -65,6 +65,10 @@ public class RobotContainer {
     private final CommandXboxController joystick1 = new CommandXboxController(1);
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+
+
+    //private final AutoFactory autoFactory;
+   // private final AutoChooser autoChooser = new AutoChooser();
     
     private DoubleSupplier input = () -> 0.1;
     
@@ -79,6 +83,7 @@ public class RobotContainer {
     
      private final AutoRoutines autoRoutines = new AutoRoutines(
         swerve,
+        drivetrain,
         intake,
         floor,
         feeder,
@@ -100,7 +105,12 @@ public class RobotContainer {
     );
 
     public RobotContainer() {
+       // autoFactory = drivetrain.createAutoFactory();
         
+        //autoChooser.addRoutine("simple", autoRoutines::simplePathAuto);
+        //SmartDashboard.putData("Auto Chooser", autoChooser);
+
+
         configureBindings();
         autoRoutines.configure();
     }
@@ -163,7 +173,7 @@ public class RobotContainer {
 
         joystick1.b().onTrue(intake.testIntake(input)).onFalse(intake.testIntake(() -> 0));
 
-        joystick1.x().onTrue(intake.intakeCommand());
+        joystick1.x().onTrue(intake.intakeCommand()).onFalse(intake.stopIntake());
 
         joystick1.leftBumper().onTrue(intake.homingCommand());
 
@@ -224,4 +234,8 @@ public class RobotContainer {
             drivetrain.applyRequest(() -> idle)
         );
     }
+
+    // public Command getAutonomousCommand() {
+    //     return autoChooser.selectedCommand();
+    // }
 }

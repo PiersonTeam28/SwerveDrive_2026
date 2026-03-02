@@ -27,8 +27,11 @@ import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
 
+import frc.robot.subsystems.CommandSwerveDrivetrain;
+
 public final class AutoRoutines {
     private final Swerve swerve;
+    private final CommandSwerveDrivetrain drivetrain;
     private final Intake intake;
     private final Floor floor;
     private final Feeder feeder;
@@ -44,6 +47,7 @@ public final class AutoRoutines {
 
     public AutoRoutines(
         Swerve swerve,
+        CommandSwerveDrivetrain drivetrain,
         Intake intake,
         Floor floor,
         Feeder feeder,
@@ -53,6 +57,7 @@ public final class AutoRoutines {
         Limelight limelight
     ) {
         this.swerve = swerve;
+        this.drivetrain = drivetrain;
         this.intake = intake;
         this.floor = floor;
         this.feeder = feeder;
@@ -63,7 +68,7 @@ public final class AutoRoutines {
 
         this.subsystemCommands = new SubsystemCommands(swerve, intake, floor, feeder, shooter, hood, hanger);
 
-        this.autoFactory = swerve.createAutoFactory();
+        this.autoFactory = drivetrain.createAutoFactory();
         this.autoChooser = new AutoChooser();
     }
 
@@ -120,4 +125,8 @@ public final class AutoRoutines {
 
         return routine;
     }
+
+    // public AutoRoutine test() {
+    //     final AutoRoutine routine = autoFactory.newRoutine("TEST");
+    // }
 }
