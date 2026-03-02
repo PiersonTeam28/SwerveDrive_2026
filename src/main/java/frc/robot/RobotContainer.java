@@ -7,12 +7,16 @@ package frc.robot;
 import static edu.wpi.first.units.Units.*;
 
 import java.util.Optional;
+import java.util.function.DoubleSupplier;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+
+import choreo.auto.AutoChooser;
+import choreo.auto.AutoFactory;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -41,7 +45,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
-
+import frc.robot.subsystems.Feeder.Speed;
 import frc.util.SwerveTelemetry;
 
 public class RobotContainer {
@@ -62,7 +66,7 @@ public class RobotContainer {
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     
-    
+    private DoubleSupplier input = () -> 0.1;
     
     private final Swerve swerve = new Swerve();
     private final Intake intake = new Intake();
@@ -150,8 +154,24 @@ public class RobotContainer {
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
-        joystick1.y().onTrue(hood.positionCommand(1)).onFalse(hood.positionCommand(0.5));
-        joystick1.a().onTrue(hood.positionCommand(0)).onFalse(hood.positionCommand(0.5));
+        joystick1.y().onTrue(hood.positionCommand(0.7));
+        joystick1.a().onTrue(hood.positionCommand(0.2)).onFalse(hood.positionCommand(0.5));
+
+        //joystick1.x().onTrue(subsystemCommands.feed());
+
+        joystick1.rightBumper().onTrue(subsystemCommands.shootManually());
+
+        joystick1.b().onTrue(intake.testIntake(input)).onFalse(intake.testIntake(() -> 0));
+
+        joystick1.x().onTrue(intake.intakeCommand());
+
+        joystick1.leftBumper().onTrue(intake.homingCommand());
+
+       // intake.setDefaultCommand(intake.testIntake(() -> joystick1.getLeftY()));
+
+
+
+
 
 
     }
