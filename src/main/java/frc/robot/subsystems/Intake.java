@@ -20,6 +20,7 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import java.security.spec.EncodedKeySpec;
 import java.util.function.DoubleSupplier;
 
 
@@ -28,12 +29,14 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.AbsoluteEncoderConfig;
+import com.revrobotics.spark.config.EncoderConfig;
 import com.revrobotics.spark.config.MAXMotionConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.encoder.*;
+import com.revrobotics.encoder.config.*;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.config.*;
 import com.revrobotics.spark.*;
@@ -53,7 +56,7 @@ import frc.robot.Constants;
 public class Intake extends SubsystemBase {
     public enum Speed {
         STOP(0),
-        INTAKE(0.4);
+        INTAKE(0.5);
 
         private final double percentOutput;
 
@@ -65,7 +68,7 @@ public class Intake extends SubsystemBase {
             return Volts.of(percentOutput * 12.0);
         }
     }
-
+    // probably no need for these angles, just starting up and going down to intake at start of match. Intake could move a bit to move balls around if they get stuck? so the agitate command
     public enum Position {
         HOMED(110),
         STOWED(100),
@@ -103,7 +106,8 @@ public class Intake extends SubsystemBase {
     private static final double kMaxPV = kMaxPivotVelocity.in(RPM)* SLOWL; // to double?
     private static final double kMaxPA = kMaxPivotVelocity.in(RotationsPerSecond) * SLOWL; // to double?
 
-    private final TalonFX pivotMotor, rollerMotor;
+    //private final TalonFX pivotMotor;
+    private final TalonFX rollerMotor;
     private final VoltageOut pivotVoltageRequest = new VoltageOut(0);
     private final MotionMagicVoltage pivotMotionMagicRequest = new MotionMagicVoltage(0).withSlot(0);
     private final VoltageOut rollerVoltageRequest = new VoltageOut(0);
@@ -111,7 +115,8 @@ public class Intake extends SubsystemBase {
     private final SparkMax pivot;
     private final SparkClosedLoopController pivotController;
     //private final AbsoluteEncoder pivotEncoder;
-    private final AbsoluteEncoderConfig pivotEncoderConfig;
+   // private final AbsoluteEncoderConfig pivotEncoderConfigAbs;
+   // private final EncoderConfig pivotEncoderConfig;
     //private final MAXMotionConfig maxMotionConfig;
 
 
@@ -126,19 +131,19 @@ public class Intake extends SubsystemBase {
 
     public Intake() {                               // PIVOT MOTOR IS A SPARKMAX MOTOR
         
-        pivot = new SparkMax(Constants.kIntakePivot, MotorType.kBrushed); //SPARKMAX 29
+        pivot = new SparkMax(Constants.kIntakePivot, MotorType.kBrushless); //SPARKMAX 29
        
         
-        pivotEncoderConfig = new AbsoluteEncoderConfig();
+        //pivotEncoderConfig = new EncoderConfig();
 
 
        // maxMotionConfig = new MAXMotionConfig();
 
         
-        pivotMotor = new TalonFX(Constants.kIntakePivot, Constants.kCANivoreCANBus); 
+        //pivotMotor = new TalonFX(Constants.kIntakePivot, Constants.kCANivoreCANBus); 
         rollerMotor = new TalonFX(Constants.kIntakeRollers, Constants.kRoboRioCANBus);
         
-        configurePivotMotor();
+        //configurePivotMotor();
         configureRollerMotor();
        
         configureSparkMaxPivot();
@@ -153,18 +158,22 @@ public class Intake extends SubsystemBase {
         
         pivotConfig
             .smartCurrentLimit(60)
-            .idleMode(IdleMode.kBrake)
+            .idleMode(IdleMode.kCoast)
             .inverted(invertPivot);
-        
-        pivotConfig.absoluteEncoder.apply(pivotEncoderConfig);
-        
-        pivotConfig.closedLoop.maxMotion
-            .cruiseVelocity(kMaxPV, ClosedLoopSlot.kSlot0)
-            .maxAcceleration(kMaxPA, ClosedLoopSlot.kSlot0)
-            .allowedProfileError(kAllowedError, ClosedLoopSlot.kSlot0);
 
-        pivotConfig.closedLoop
-            .pid(kP, kI, kD, ClosedLoopSlot.kSlot0);
+        
+        
+       // pivotConfig.absoluteEncoder.apply(pivotEncoderConfig);
+
+
+
+        // pivotConfig.closedLoop.maxMotion
+        //     .cruiseVelocity(kMaxPV, ClosedLoopSlot.kSlot0)
+        //     .maxAcceleration(kMaxPA, ClosedLoopSlot.kSlot0)
+        //     .allowedProfileError(kAllowedError, ClosedLoopSlot.kSlot0);
+
+        // pivotConfig.closedLoop
+        //     .pid(kP, kI, kD, ClosedLoopSlot.kSlot0);
 
         // pivotConfig.closedLoop.feedForward
         //     .kA(kA, ClosedLoopSlot.kSlot0)
@@ -180,40 +189,40 @@ public class Intake extends SubsystemBase {
 
     }
 
-    private void configurePivotMotor() {
-        final TalonFXConfiguration config = new TalonFXConfiguration()
+    // private void configurePivotMotor() {
+    //     final TalonFXConfiguration config = new TalonFXConfiguration()
         
-            .withMotorOutput(
-                new MotorOutputConfigs()
-                    .withInverted(InvertedValue.CounterClockwise_Positive)
-                    .withNeutralMode(NeutralModeValue.Brake)
-            )
-            .withCurrentLimits(
-                new CurrentLimitsConfigs()
-                    .withStatorCurrentLimit(Amps.of(120))
-                    .withStatorCurrentLimitEnable(true)
-                    .withSupplyCurrentLimit(Amps.of(70))
-                    .withSupplyCurrentLimitEnable(true)
-            )
-            .withFeedback(
-                new FeedbackConfigs()
-                    .withFeedbackSensorSource(FeedbackSensorSourceValue.RotorSensor)
-                    .withSensorToMechanismRatio(kPivotReduction)
-            )
-            .withMotionMagic(
-                new MotionMagicConfigs()
-                    .withMotionMagicCruiseVelocity(kMaxPivotSpeed)
-                    .withMotionMagicAcceleration(kMaxPivotSpeed.per(Second))
-            )
-            .withSlot0(
-                new Slot0Configs()
-                    .withKP(300)
-                    .withKI(0)
-                    .withKD(0)
-                    .withKV(12.0 / kMaxPivotSpeed.in(RotationsPerSecond)) // 12 volts when requesting max RPS
-            );
-        pivotMotor.getConfigurator().apply(config);
-    }
+    //         .withMotorOutput(
+    //             new MotorOutputConfigs()
+    //                 .withInverted(InvertedValue.CounterClockwise_Positive)
+    //                 .withNeutralMode(NeutralModeValue.Brake)
+    //         )
+    //         .withCurrentLimits(
+    //             new CurrentLimitsConfigs()
+    //                 .withStatorCurrentLimit(Amps.of(120))
+    //                 .withStatorCurrentLimitEnable(true)
+    //                 .withSupplyCurrentLimit(Amps.of(70))
+    //                 .withSupplyCurrentLimitEnable(true)
+    //         )
+    //         .withFeedback(
+    //             new FeedbackConfigs()
+    //                 .withFeedbackSensorSource(FeedbackSensorSourceValue.RotorSensor)
+    //                 .withSensorToMechanismRatio(kPivotReduction)
+    //         )
+    //         .withMotionMagic(
+    //             new MotionMagicConfigs()
+    //                 .withMotionMagicCruiseVelocity(kMaxPivotSpeed)
+    //                 .withMotionMagicAcceleration(kMaxPivotSpeed.per(Second))
+    //         )
+    //         .withSlot0(
+    //             new Slot0Configs()
+    //                 .withKP(300)
+    //                 .withKI(0)
+    //                 .withKD(0)
+    //                 .withKV(12.0 / kMaxPivotSpeed.in(RotationsPerSecond)) // 12 volts when requesting max RPS
+    //         );
+    //     pivotMotor.getConfigurator().apply(config);
+    // }
 
     private void configureRollerMotor() {
         final TalonFXConfiguration config = new TalonFXConfiguration()
@@ -364,7 +373,11 @@ public class Intake extends SubsystemBase {
 
         // builder.addDoubleProperty("Angle (degrees)", () -> pivotMotor.getPosition().getValue().in(Degrees), null);
 
-        builder.addDoubleProperty("Encoder Position", () -> pivot.getAbsoluteEncoder().getPosition(), null);
+       // builder.addDoubleProperty("Alt Encoder Position", () -> pivot.getAlternateEncoder().getPosition(), null);
+        //builder.addDoubleProperty("Primary Encoder Position", () -> pivot.getEncoder().getPosition(), null);
+        builder.addDoubleProperty("Absolute Encoder Position", () -> pivot.getAbsoluteEncoder().getPosition(), null);
+
+
 
             builder.addDoubleProperty("Angle (degrees)", () -> Degrees.of(pivot.getAbsoluteEncoder().getPosition()).in(Degrees), null);
             builder.addDoubleProperty("Target Angle (degrees)", () -> pivotController.getMAXMotionSetpointPosition(), null);

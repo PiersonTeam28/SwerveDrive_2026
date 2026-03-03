@@ -165,11 +165,11 @@ public class RobotContainer {
         drivetrain.registerTelemetry(logger::telemeterize);
 
         joystick1.y().onTrue(hood.positionCommand(0.7));
-        joystick1.a().onTrue(hood.positionCommand(0.2)).onFalse(hood.positionCommand(0.5));
+        joystick1.a().onTrue(hood.positionCommand(0.2));
 
         //joystick1.x().onTrue(subsystemCommands.feed());
 
-        joystick1.rightBumper().onTrue(subsystemCommands.shootManually());
+        joystick1.rightBumper().onTrue(subsystemCommands.shootManually()).onFalse(subsystemCommands.stopShooter());
 
         joystick1.b().onTrue(intake.testIntake(input)).onFalse(intake.testIntake(() -> 0));
 
@@ -177,7 +177,7 @@ public class RobotContainer {
 
         joystick1.leftBumper().onTrue(intake.homingCommand());
 
-       // intake.setDefaultCommand(intake.testIntake(() -> joystick1.getLeftY()));
+        intake.setDefaultCommand(intake.testIntake(() -> joystick1.getLeftY()));
 
 
 
