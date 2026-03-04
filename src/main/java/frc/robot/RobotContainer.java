@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 import frc.robot.commands.SubsystemCommands;
@@ -74,6 +75,7 @@ public class RobotContainer {
     
     private final Swerve swerve = new Swerve();
     private final Intake intake = new Intake();
+    private final Arm arm = new Arm();
     private final Floor floor = new Floor();
     private final Feeder feeder = new Feeder();
     private final Shooter shooter = new Shooter();
@@ -169,15 +171,21 @@ public class RobotContainer {
 
         //joystick1.x().onTrue(subsystemCommands.feed());
 
+        //shoot
         joystick1.rightBumper().onTrue(subsystemCommands.shootManually()).onFalse(subsystemCommands.stopShooter());
 
-        joystick1.b().onTrue(intake.testIntake(input)).onFalse(intake.testIntake(() -> 0));
+
+        //joystick1.b().onTrue(intake.testIntake(input)).onFalse(intake.testIntake(() -> 0));
 
         joystick1.x().onTrue(intake.intakeCommand()).onFalse(intake.stopIntake());
 
-        joystick1.leftBumper().onTrue(intake.homingCommand());
+        arm.setDefaultCommand(arm.pivotCommand(() -> joystick1.getLeftY()));
 
-        intake.setDefaultCommand(intake.testIntake(() -> joystick1.getLeftY()));
+
+
+        //joystick1.leftBumper().onTrue(intake.homingCommand());
+
+       
 
 
 
