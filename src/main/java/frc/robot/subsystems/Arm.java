@@ -102,6 +102,7 @@ public class Arm extends SubsystemBase {
     public Arm() {                               // PIVOT MOTOR IS A SPARKMAX MOTOR
         
         pivot = new SparkMax(Constants.kIntakePivot, MotorType.kBrushless); //SPARKMAX 29
+        
        
         
         //pivotEncoderConfig = new EncoderConfig();
@@ -124,9 +125,11 @@ public class Arm extends SubsystemBase {
 
     private void configureSparkMaxPivot() {
         final SparkMaxConfig pivotConfig = new SparkMaxConfig();
+
+        
         
         pivotConfig
-            .smartCurrentLimit(60)
+            .smartCurrentLimit(80)
             .idleMode(IdleMode.kBrake)
             .inverted(invertPivot);
 
@@ -163,17 +166,17 @@ public class Arm extends SubsystemBase {
 
     // Checks if the pivot is within the position tolerance of the target position TALON
     // Changed to SparkMAX
-    private boolean isPositionWithinTolerance() {
-        //final Angle currentPosition = pivotMotor.getPosition().getValue();
-        final Angle currentPos = Degrees.of(pivot.getAbsoluteEncoder().getPosition());
-        //pivot.getAbsoluteEncoder().getPosition();
-       // pivotController.getMAXMotionSetpointPosition();
-        //final Angle targetPosition = pivotMotionMagicRequest.getPositionMeasure();
-        final Angle targetPos = Degrees.of(pivotController.getMAXMotionSetpointPosition());
+    // private boolean isPositionWithinTolerance() {
+    //     //final Angle currentPosition = pivotMotor.getPosition().getValue();
+    //     final Angle currentPos = Degrees.of(pivot.getAbsoluteEncoder().getPosition());
+    //     //pivot.getAbsoluteEncoder().getPosition();
+    //    // pivotController.getMAXMotionSetpointPosition();
+    //     //final Angle targetPosition = pivotMotionMagicRequest.getPositionMeasure();
+    //     final Angle targetPos = Degrees.of(pivotController.getMAXMotionSetpointPosition());
 
     
-        return currentPos.isNear(targetPos, kPositionTolerance);
-    }
+    //     return currentPos.isNear(targetPos, kPositionTolerance);
+    // }
 
    
 
@@ -184,13 +187,13 @@ public class Arm extends SubsystemBase {
 
    
 
-    public void set(double setpoint){
-        pivotController.setSetpoint(setpoint, SparkBase.ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
-    }
+    // public void set(double setpoint){
+    //     pivotController.setSetpoint(setpoint, SparkBase.ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+    // }
 
    
     public void testSetPivotPercentOutput(double percentOutput) {
-        pivot.setVoltage(Volts.of(percentOutput * 12.0));
+        pivot.set(percentOutput);
     }
 
     public Command pivotCommand(DoubleSupplier speedSupplier) {
