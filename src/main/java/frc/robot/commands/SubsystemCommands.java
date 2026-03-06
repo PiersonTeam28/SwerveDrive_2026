@@ -5,6 +5,7 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.*;
+
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Floor;
 import frc.robot.subsystems.Hanger;
@@ -12,6 +13,7 @@ import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.Arm;
 
 public final class SubsystemCommands {
     private final Swerve swerve;
@@ -21,7 +23,7 @@ public final class SubsystemCommands {
     private final Shooter shooter;
     private final Hood hood;
     private final Hanger hanger;
-
+    private final Arm arm;
     private final DoubleSupplier forwardInput;
     private final DoubleSupplier leftInput;
 
@@ -33,6 +35,9 @@ public final class SubsystemCommands {
         Shooter shooter,
         Hood hood,
         Hanger hanger,
+        Arm arm,
+        
+        
         DoubleSupplier forwardInput,
         DoubleSupplier leftInput
     ) {
@@ -43,6 +48,7 @@ public final class SubsystemCommands {
         this.shooter = shooter;
         this.hood = hood;
         this.hanger = hanger;
+        this.arm = arm;
 
         this.forwardInput = forwardInput;
         this.leftInput = leftInput;
@@ -55,7 +61,8 @@ public final class SubsystemCommands {
         Feeder feeder,
         Shooter shooter,
         Hood hood,
-        Hanger hanger
+        Hanger hanger,
+        Arm arm
     ) {
         this(
             swerve,
@@ -65,6 +72,7 @@ public final class SubsystemCommands {
             shooter,
             hood,
             hanger,
+            arm,
             () -> 0,
             () -> 0
         );

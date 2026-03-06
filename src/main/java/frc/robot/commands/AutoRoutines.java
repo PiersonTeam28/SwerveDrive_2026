@@ -27,6 +27,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.Arm;
 
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
@@ -39,6 +40,7 @@ public final class AutoRoutines {
     private final Shooter shooter;
     private final Hood hood;
     private final Hanger hanger;
+    private final Arm arm;
     private final Limelight limelight;
 
     private final SubsystemCommands subsystemCommands;
@@ -55,6 +57,7 @@ public final class AutoRoutines {
         Shooter shooter,
         Hood hood,
         Hanger hanger,
+        Arm arm,
         Limelight limelight
     ) {
         this.swerve = swerve;
@@ -66,8 +69,9 @@ public final class AutoRoutines {
         this.hood = hood;
         this.hanger = hanger;
         this.limelight = limelight;
+        this.arm = arm;
 
-        this.subsystemCommands = new SubsystemCommands(swerve, intake, floor, feeder, shooter, hood, hanger);
+        this.subsystemCommands = new SubsystemCommands(swerve, intake, floor, feeder, shooter, hood, hanger, arm);
 
         this.autoFactory = drivetrain.createAutoFactory();
         this.autoChooser = new AutoChooser();

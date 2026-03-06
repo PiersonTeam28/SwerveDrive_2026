@@ -50,6 +50,7 @@ import frc.robot.subsystems.Feeder.Speed;
 import frc.util.SwerveTelemetry;
 
 public class RobotContainer {
+    
     private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond) * Constants.SLOW; // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
 
@@ -92,6 +93,7 @@ public class RobotContainer {
         shooter,
         hood,
         hanger,
+        arm,
         limelight
     );
     private final SubsystemCommands subsystemCommands = new SubsystemCommands(
@@ -102,6 +104,7 @@ public class RobotContainer {
         shooter,
         hood,
         hanger,
+        arm,
         () -> -joystick.getLeftY(),
         () -> -joystick.getLeftX()
     );
@@ -184,14 +187,6 @@ public class RobotContainer {
 
 
         //joystick1.leftBumper().onTrue(intake.homingCommand());
-
-       
-
-
-
-
-
-
     }
 
     // private void configureManualDriveBindings() {

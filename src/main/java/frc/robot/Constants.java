@@ -8,7 +8,8 @@ import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import com.ctre.phoenix6.CANBus;
-
+// Bro Chris is hella annoying
+// Accountability versus Crash-out Chris. AKA nuclear bomb vs. coughing baby
 
 public class Constants {
 
@@ -57,21 +58,24 @@ public class Constants {
 
     public static final int PIGEONCAWWWWWWWWW = 13;
 
-    //PORTS 
 
     // CAN Buses
     public static final CANBus kRoboRioCANBus = new CANBus("rio");
     public static final CANBus kCANivoreCANBus = new CANBus("main");
 
-    // Talon FX IDs
+   
     public static final int kIntakePivot = 29;
     public static final int kIntakeRollers = 5;
     public static final int kFloor = 12;
     public static final int kFeeder = 7;
     public static final int kShooterLeft = 11;
-    //public static final int kShooterMiddle = 15;
     public static final int kShooterRight = 17;
     public static final int kHanger = 28;
+
+
+    
+    public static final int kAgitatorL = 43;
+    public static final int kAgitatorR = 44;
 
 
 }
