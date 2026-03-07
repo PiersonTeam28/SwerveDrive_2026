@@ -8,8 +8,8 @@ import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import com.ctre.phoenix6.CANBus;
-// Bro Chris is hella annoying
-// Accountability versus Crash-out Chris. AKA nuclear bomb vs. coughing baby
+
+
 
 public class Constants {
 
@@ -25,7 +25,7 @@ public class Constants {
 
     public static final AngularVelocity kPivotRPM = RPM.of(6000);
 
-    public static final double SLOW = 0.66;
+    public static final double SLOW = 0.25;
 
     //public static final double INTAKE = 0.5;
     
@@ -35,6 +35,8 @@ public class Constants {
 
     public static final int HOOD_L = 0;
     public static final int HOOD_R = 1;
+
+    public static final int LOCK_HANGER = 2;
     
     
     // DIO IDS
