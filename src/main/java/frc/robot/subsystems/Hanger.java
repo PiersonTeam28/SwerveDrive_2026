@@ -7,6 +7,8 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Volts;
 
+import java.util.function.DoubleSupplier;
+
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
@@ -17,6 +19,22 @@ import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.AbsoluteEncoderConfig;
+import com.revrobotics.spark.config.EncoderConfig;
+import com.revrobotics.spark.config.MAXMotionConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase;
+import com.revrobotics.encoder.*;
+import com.revrobotics.encoder.config.*;
+import com.revrobotics.AbsoluteEncoder;
+import com.revrobotics.config.*;
+import com.revrobotics.spark.*;
 
 import edu.wpi.first.units.AngleUnit;
 import edu.wpi.first.units.DistanceUnit;
@@ -32,6 +50,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.KrakenX60;
 import frc.robot.Constants;
+
+// Convert this to SparkMax NEO
 
 public class Hanger extends SubsystemBase {
     public enum Position {
@@ -59,10 +79,25 @@ public class Hanger extends SubsystemBase {
     private final MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(0).withSlot(0);
     private final VoltageOut voltageRequest = new VoltageOut(0);
 
+    private final SparkMax hang;
+
+
     private boolean isHomed = false;
 
     public Hanger() {
         motor = new TalonFX(Constants.kHanger, Constants.kRoboRioCANBus);
+
+        hang = new SparkMax(27, MotorType.kBrushless);
+
+        final SparkMaxConfig hangConfig = new SparkMaxConfig();
+
+        hangConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(40);
+
+        hang.configure(hangConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+
+
+        
 
         final TalonFXConfiguration config = new TalonFXConfiguration()
             .withMotorOutput(
@@ -125,6 +160,18 @@ public class Hanger extends SubsystemBase {
         )
         .unless(() -> isHomed)
         .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+    }
+
+    public void setOutput(double percentOutput) {
+        hang.set(percentOutput*Constants.SLOW_HANG);
+    }
+
+    public Command stopHang() {
+        return runOnce(() -> setOutput(0));
+    }
+
+    public Command hangCommand(DoubleSupplier percentOutputSupplier) {
+        return run(() -> setOutput(percentOutputSupplier.getAsDouble()));
     }
 
     public boolean isHomed() {

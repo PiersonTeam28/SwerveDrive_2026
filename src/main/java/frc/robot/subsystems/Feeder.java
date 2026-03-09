@@ -133,10 +133,7 @@ public class Feeder extends SubsystemBase {
     }
 
     public Command feedAndAgitateCommand() {
-        return new ParallelDeadlineGroup(
-            feedCommand(),
-            agitateCommand()
-        );
+        return indexCommand();
     }
 
 

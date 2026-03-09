@@ -38,7 +38,7 @@ public class Shooter extends SubsystemBase {
     private final VelocityVoltage velocityRequest = new VelocityVoltage(0).withSlot(0);
     private final VoltageOut voltageRequest = new VoltageOut(0);
 
-    private double dashboardTargetRPM = 3000.0;
+    private double dashboardTargetRPM = 5000.0;
 
     public Shooter() {
         leftMotor = new TalonFX(Constants.kShooterLeft, Constants.kRoboRioCANBus);
@@ -135,6 +135,7 @@ public class Shooter extends SubsystemBase {
         builder.addStringProperty("Command", () -> getCurrentCommand() != null ? getCurrentCommand().getName() : "null", null);
         builder.addDoubleProperty("Dashboard RPM", () -> dashboardTargetRPM, value -> dashboardTargetRPM = value);
         builder.addDoubleProperty("Target RPM", () -> velocityRequest.getVelocityMeasure().in(RPM), null);
+        builder.addBooleanProperty("Is At Target RPM", () -> isVelocityWithinTolerance(), null);
     }
 
 }

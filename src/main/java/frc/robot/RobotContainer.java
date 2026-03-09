@@ -1,3 +1,4 @@
+
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
@@ -134,8 +135,10 @@ public class RobotContainer {
         //configureManualDriveBindings();
 
         limelight.setDefaultCommand(updateVisionCommand());
+
+
         // Note that X is defined as forward according to WPILib convention,
-        // and Y is defined as to the left according to WPILib convention.
+        // and Y is defined as to the left according to WPILib convention. (This is referring to the robot's coordinate system, not the joystick's coordinate system.)
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
@@ -169,14 +172,15 @@ public class RobotContainer {
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
+        //-----------------------------Subsystem Bindings------------------//
+
+
         joystick1.y().onTrue(hood.positionCommand(0.7));
         joystick1.a().onTrue(hood.positionCommand(0.2));
 
-        //joystick1.x().onTrue(subsystemCommands.feed());
+        // hood.setDefaultCommand(hood.positionCommand(() -> joystick1.getRightY()));
 
-        //shoot
-        joystick1.rightBumper().onTrue(subsystemCommands.shootManually()).onFalse(subsystemCommands.stopShooter());
-
+        joystick1.rightBumper().onTrue(subsystemCommands.shootManually()); 
 
         //joystick1.b().onTrue(intake.testIntake(input)).onFalse(intake.testIntake(() -> 0));
 
@@ -184,9 +188,8 @@ public class RobotContainer {
 
         arm.setDefaultCommand(arm.pivotCommand(() -> joystick1.getLeftY()));
 
+        hanger.setDefaultCommand(hanger.hangCommand(() -> joystick1.getRightY()));
 
-
-        //joystick1.leftBumper().onTrue(intake.homingCommand());
     }
 
     // private void configureManualDriveBindings() {

@@ -27,6 +27,10 @@ public class Constants {
 
     public static final double SLOW = 0.25;
 
+    public static final double SLOW_SHOOT = 0.5;
+
+    public static final double SLOW_HANG = 0.25;
+
     //public static final double INTAKE = 0.5;
     
 
@@ -66,18 +70,21 @@ public class Constants {
     public static final CANBus kCANivoreCANBus = new CANBus("main");
 
    
-    public static final int kIntakePivot = 29;
+    public static final int kIntakePivot = 29; //SPARK
+
     public static final int kIntakeRollers = 5;
     public static final int kFloor = 12;
     public static final int kFeeder = 7;
     public static final int kShooterLeft = 11;
     public static final int kShooterRight = 17;
-    public static final int kHanger = 28;
+
+
+    public static final int kHanger = 28; //SPARK
 
 
     
-    public static final int kAgitatorL = 43;
-    public static final int kAgitatorR = 44;
+    public static final int kAgitatorL = 43; //SPARK
+    public static final int kAgitatorR = 47; //SPARK
 
 
 }

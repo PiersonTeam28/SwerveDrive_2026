@@ -96,10 +96,17 @@ public final class SubsystemCommands {
 
     public Command shootManually() {
         return shooter.dashboardSpinUpCommand()
-            .andThen(feed())
+            .andThen(feed1())
             .handleInterrupt(() -> shooter.stop());
     }
 
+    private Command feed1() {
+        return Commands.sequence(
+            Commands.waitSeconds(0.25),
+            feeder.feedAndAgitateCommand());
+    }
+
+    // OLD FEED
     private Command feed() {
         return Commands.sequence(
             Commands.waitSeconds(0.25),
