@@ -111,6 +111,10 @@ public class Shooter extends SubsystemBase {
         return defer(() -> spinUpCommand(dashboardTargetRPM)); 
     }
 
+    public Command stopCommand(){
+        return run(() -> stop());
+    }
+
     
 
     public boolean isVelocityWithinTolerance() {

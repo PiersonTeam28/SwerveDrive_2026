@@ -20,6 +20,7 @@ import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
@@ -180,7 +181,9 @@ public class RobotContainer {
 
         // hood.setDefaultCommand(hood.positionCommand(() -> joystick1.getRightY()));
 
-        joystick1.rightBumper().onTrue(subsystemCommands.shootManually()); 
+        joystick1.rightBumper().onTrue(subsystemCommands.shootManually()).onFalse(subsystemCommands.stopShooter()); 
+
+        joystick.leftBumper().onTrue(shooter.stopCommand());
 
         //joystick1.b().onTrue(intake.testIntake(input)).onFalse(intake.testIntake(() -> 0));
 
