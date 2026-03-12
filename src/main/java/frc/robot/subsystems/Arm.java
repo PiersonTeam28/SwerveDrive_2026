@@ -85,8 +85,8 @@ public class Arm extends SubsystemBase {
     private final SparkMax pivot;
     private final SparkClosedLoopController pivotController;
     //private final AbsoluteEncoder pivotEncoder;
-   // private final AbsoluteEncoderConfig pivotEncoderConfigAbs;
-   // private final EncoderConfig pivotEncoderConfig;
+    // private final AbsoluteEncoderConfig pivotEncoderConfigAbs;
+    // private final EncoderConfig pivotEncoderConfig;
     //private final MAXMotionConfig maxMotionConfig;
 
 
@@ -129,15 +129,19 @@ public class Arm extends SubsystemBase {
         
         
         pivotConfig
-            .smartCurrentLimit(80)
+            .smartCurrentLimit(60) //change to 60?
             .idleMode(IdleMode.kBrake)
             .inverted(invertPivot);
 
         
+
+
+
+        pivotConfig.alternateEncoder.countsPerRevolution(8192);
         
        // pivotConfig.absoluteEncoder.apply(pivotEncoderConfig);
 
-
+       
 
         // pivotConfig.closedLoop.maxMotion
         //     .cruiseVelocity(kMaxPV, ClosedLoopSlot.kSlot0)
@@ -145,7 +149,7 @@ public class Arm extends SubsystemBase {
         //     .allowedProfileError(kAllowedError, ClosedLoopSlot.kSlot0);
 
         // pivotConfig.closedLoop
-        //     .pid(kP, kI, kD, ClosedLoopSlot.kSlot0);
+        //     .pid(kP, kI, kD, ClosedLoopSlot.kSlot0);                        
 
         // pivotConfig.closedLoop.feedForward
         //     .kA(kA, ClosedLoopSlot.kSlot0)
@@ -157,6 +161,8 @@ public class Arm extends SubsystemBase {
        
        
         pivot.configure(pivotConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+        
         
 
     }
@@ -178,6 +184,30 @@ public class Arm extends SubsystemBase {
     //     return currentPos.isNear(targetPos, kPositionTolerance);
     // }
 
+
+
+    private boolean upperLimit() {
+        // Implement logic to check if the pivot has reached its upper limit
+        if (pivot.getAlternateEncoder().getPosition() <= 0.003) {
+            // this.getCurrentCommand().cancel();
+            // runOnce(() -> stopCommand());
+            return true;        
+        }
+        else {
+            return false;
+        }
+    }
+    private boolean lowerLimit() {
+        // Implement logic to check if the pivot has reached its lower limit
+        if (pivot.getAlternateEncoder().getPosition() >= 0.247) {
+            // this.getCurrentCommand().cancel();
+            // runOnce(() -> stopCommand());
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
    
 
     private void setPivotPercentOutput(double percentOutput) {
@@ -200,8 +230,17 @@ public class Arm extends SubsystemBase {
         return run(() -> testSetPivotPercentOutput(speedSupplier.getAsDouble()));
     }
 
+    public Command upCommand() {
+        return run(() -> testSetPivotPercentOutput(-0.15));
+    }
 
-   
+    public Command downCommand() {
+        return run(() -> testSetPivotPercentOutput(0.15));
+    }
+
+    public Command stopCommand() {
+        return runOnce(() -> testSetPivotPercentOutput(0));
+    }
 
 
 
@@ -214,13 +253,14 @@ public class Arm extends SubsystemBase {
 
         // builder.addDoubleProperty("Angle (degrees)", () -> pivotMotor.getPosition().getValue().in(Degrees), null);
 
-       // builder.addDoubleProperty("Alt Encoder Position", () -> pivot.getAlternateEncoder().getPosition(), null);
+        builder.addDoubleProperty("Alt Encoder Position", () -> pivot.getAlternateEncoder().getPosition(), null);
         //builder.addDoubleProperty("Primary Encoder Position", () -> pivot.getEncoder().getPosition(), null);
-        builder.addDoubleProperty("Absolute Encoder Position", () -> pivot.getAbsoluteEncoder().getPosition(), null);
+        //builder.addDoubleProperty("Absolute Encoder Position", () -> pivot.getAbsoluteEncoder().getPosition(), null);
 
+        builder.addBooleanProperty("Upper Limit", () -> upperLimit(), null);
+        builder.addBooleanProperty("Lower Limit", () -> lowerLimit(), null);
 
-
-            builder.addDoubleProperty("Angle (degrees)", () -> Degrees.of(pivot.getAbsoluteEncoder().getPosition()).in(Degrees), null);
+           // builder.addDoubleProperty("Angle (degrees)", () -> Degrees.of(pivot.getAbsoluteEncoder().getPosition()).in(Degrees), null);
             builder.addDoubleProperty("Target Angle (degrees)", () -> pivotController.getMAXMotionSetpointPosition(), null);
 
             builder.addDoubleProperty("kP", null, value -> {

@@ -19,6 +19,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.FollowPathCommand;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -31,6 +34,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Arm;
@@ -176,12 +182,20 @@ public class RobotContainer {
         //-----------------------------Subsystem Bindings------------------//
 
 
-        joystick1.y().onTrue(hood.positionCommand(0.7));
-        joystick1.a().onTrue(hood.positionCommand(0.2));
+        joystick1.y().onTrue(arm.upCommand()).onFalse(arm.stopCommand());
+        joystick1.a().onTrue(arm.downCommand()).onFalse(arm.stopCommand());
+
+        // joystick1.y().onTrue(hood.positionCommand(0.7));
+        // joystick1.a().onTrue(hood.positionCommand(0.2));
+
+        
+
+
+        joystick1.b().onTrue(feeder.indexCommand()).onFalse(feeder.stopFeeder());
 
         // hood.setDefaultCommand(hood.positionCommand(() -> joystick1.getRightY()));
 
-        joystick1.rightBumper().onTrue(subsystemCommands.shootManually()).onFalse(subsystemCommands.stopShooter()); 
+        joystick1.rightBumper().onTrue(subsystemCommands.shootManually()).onFalse(subsystemCommands.stopShooter().andThen(feeder.stopFeeder())); 
 
         joystick.leftBumper().onTrue(shooter.stopCommand());
 
@@ -189,7 +203,7 @@ public class RobotContainer {
 
         joystick1.x().onTrue(intake.intakeCommand()).onFalse(intake.stopIntake());
 
-        arm.setDefaultCommand(arm.pivotCommand(() -> joystick1.getLeftY()));
+        //arm.setDefaultCommand(arm.pivotCommand(() -> joystick1.getLeftY()));
 
         hanger.setDefaultCommand(hanger.hangCommand(() -> joystick1.getRightY()));
 

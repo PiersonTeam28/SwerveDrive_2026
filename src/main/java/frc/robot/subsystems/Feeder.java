@@ -36,7 +36,8 @@ import frc.robot.Constants;
 
 public class Feeder extends SubsystemBase {
     public enum Speed {
-        FEED(5000*0.75);
+        FEED(5000*0.75),
+        AGIT(0.05);
 
         private final double rpm;
 
@@ -102,6 +103,19 @@ public class Feeder extends SubsystemBase {
         );
     }
 
+
+
+    public void stop() {
+        feederMotor.setControl(voltageRequest.withOutput(Volts.of(0)));
+        agitatorMotorL.set(0);
+        agitatorMotorR.set(0);
+
+    }
+
+    public Command stopFeeder() {
+        return run(this::stop);
+    }
+
     public void setPercentOutput(double percentOutput) {
         feederMotor.setControl(
             voltageRequest
@@ -111,21 +125,22 @@ public class Feeder extends SubsystemBase {
 
     // positive percent output on one agitator motor and negative on the other to spin them in opposite directions
     public void setAgitator(double percentOutput) {
-        agitatorMotorL.set(percentOutput);
-        agitatorMotorR.set(-percentOutput);
+        agitatorMotorL.set(-percentOutput);
+        agitatorMotorR.set(percentOutput);
     }
-    
     
     public Command feedCommand() {
         return startEnd(() -> set(Speed.FEED), () -> setPercentOutput(0));
     }
 
     public Command agitateCommand() { 
-        return startEnd(() -> setAgitator(0.5), () -> setAgitator(0));
+        return startEnd(() -> setAgitator(0.05), () -> setAgitator(0));
     }
 
+
+
     public Command indexCommand() {
-        return runEnd(() -> {this.setAgitator(0.5);
+        return startEnd(() -> {this.setAgitator(0.05);
         this.set(Speed.FEED);}, () -> {
             this.setPercentOutput(0);
             this.setAgitator(0);

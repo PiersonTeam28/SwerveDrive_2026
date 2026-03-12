@@ -103,7 +103,7 @@ public final class SubsystemCommands {
     private Command feed1() {
         return Commands.sequence(
             Commands.waitSeconds(0.25),
-            feeder.feedAndAgitateCommand());
+            feeder.indexCommand()).handleInterrupt(() -> feeder.stop());
     }
 
     // OLD FEED
