@@ -15,8 +15,11 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Arm;
 
+import frc.robot.subsystems.CommandSwerveDrivetrain;
+
 public final class SubsystemCommands {
     private final Swerve swerve;
+    private final CommandSwerveDrivetrain drivetrain;
     private final Intake intake;
     private final Floor floor;
     private final Feeder feeder;
@@ -29,6 +32,7 @@ public final class SubsystemCommands {
 
     public SubsystemCommands(
         Swerve swerve,
+        CommandSwerveDrivetrain drivetrain,
         Intake intake,
         Floor floor,
         Feeder feeder,
@@ -42,6 +46,7 @@ public final class SubsystemCommands {
         DoubleSupplier leftInput
     ) {
         this.swerve = swerve;
+        this.drivetrain = drivetrain;
         this.intake = intake;
         this.floor = floor;
         this.feeder = feeder;
@@ -56,6 +61,7 @@ public final class SubsystemCommands {
 
     public SubsystemCommands(
         Swerve swerve,
+        CommandSwerveDrivetrain drivetrain,
         Intake intake,
         Floor floor,
         Feeder feeder,
@@ -66,6 +72,7 @@ public final class SubsystemCommands {
     ) {
         this(
             swerve,
+            drivetrain,
             intake,
             floor,
             feeder,
@@ -89,6 +96,20 @@ public final class SubsystemCommands {
                 .andThen(feed())
         );
     }
+
+    public Command aimAndShoot2() {
+        final AimAndDriveCommand2 aimAndDriveCommand = new AimAndDriveCommand2(drivetrain, forwardInput, leftInput);
+        final PrepareShotCommand prepareShotCommand = new PrepareShotCommand(shooter, hood, () -> drivetrain.getState().Pose);
+        return Commands.parallel(
+            aimAndDriveCommand,
+            Commands.waitSeconds(0.25)
+                .andThen(prepareShotCommand),
+            Commands.waitUntil(() -> aimAndDriveCommand.isAimed() && prepareShotCommand.isReadyToShoot())
+                .andThen(feed1())
+        );
+    }
+
+
 
     public Command stopShooter() {
         return Commands.runOnce(() -> shooter.stop());

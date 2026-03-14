@@ -71,7 +71,7 @@ public final class AutoRoutines {
         this.limelight = limelight;
         this.arm = arm;
 
-        this.subsystemCommands = new SubsystemCommands(swerve, intake, floor, feeder, shooter, hood, hanger, arm);
+        this.subsystemCommands = new SubsystemCommands(swerve, drivetrain, intake, floor, feeder, shooter, hood, hanger, arm);
 
         this.autoFactory = drivetrain.createAutoFactory();
         this.autoChooser = new AutoChooser();
@@ -80,6 +80,7 @@ public final class AutoRoutines {
     public void configure() {
         autoChooser.addRoutine("Outpost and Depot", this::outpostAndDepotRoutine);
         autoChooser.addRoutine("TEST", this::test);
+        autoChooser.addRoutine("Shoot Routine", this::shootRoutine);
         SmartDashboard.putData("Auto Chooser", autoChooser);
         RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
     }
@@ -141,6 +142,36 @@ public final class AutoRoutines {
         shootingPoseToTower.active().onTrue(hanger.positionCommand(Hanger.Position.HANGING));
         shootingPoseToTower.done().onTrue(hanger.positionCommand(Hanger.Position.HUNG));
 
+        return routine;
+    }
+
+    public AutoRoutine shootRoutine() {
+        final AutoRoutine routine = autoFactory.newRoutine("ShootRoutine");
+        final AutoTrajectory shootTrajectory = routine.trajectory("ShootRoutine");
+
+        routine.active().onTrue(
+            Commands.sequence(
+                shootTrajectory.resetOdometry(),
+                shootTrajectory.cmd()
+            )
+        );
+
+        shootTrajectory.active().whileTrue(limelight.idle());
+
+        shootTrajectory.atTime(0.5).onTrue(
+            Commands.parallel(
+                shooter.spinUpCommand(2600),
+                hood.positionCommand(0.32)
+            )
+        );
+        shootTrajectory.atTime("Shoot").onTrue(
+            Commands.sequence(
+                subsystemCommands.shootManually()
+                    .withTimeout(5)
+            )
+        );
+        //shootTrajectory.atTime("Shoot").onTrue(subsystemCommands.aimAndShoot2().withTimeout(5));
+        
         return routine;
     }
 

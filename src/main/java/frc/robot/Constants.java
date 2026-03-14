@@ -40,7 +40,7 @@ public class Constants {
     public static final int HOOD_L = 0;
     public static final int HOOD_R = 1;
 
-    public static final int LOCK_HANGER = 2;
+    public static final int LATCH = 2;
     
     
     // DIO IDS

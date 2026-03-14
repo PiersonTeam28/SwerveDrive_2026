@@ -9,6 +9,7 @@ import static edu.wpi.first.units.Units.Volts;
 
 import java.util.function.DoubleSupplier;
 
+
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
@@ -43,6 +44,7 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Per;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
@@ -81,6 +83,8 @@ public class Hanger extends SubsystemBase {
 
     private final SparkMax hang;
 
+    private final Servo latch;
+
 
     private boolean isHomed = false;
 
@@ -89,9 +93,14 @@ public class Hanger extends SubsystemBase {
 
         hang = new SparkMax(27, MotorType.kBrushless);
 
+        latch = new Servo(Constants.LATCH);
+
+        
+
         final SparkMaxConfig hangConfig = new SparkMaxConfig();
 
         hangConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(40);
+        hangConfig.alternateEncoder.countsPerRevolution(8192);
 
         hang.configure(hangConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
@@ -162,6 +171,10 @@ public class Hanger extends SubsystemBase {
         .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
     }
 
+
+
+    // code we are using-------
+
     public void setOutput(double percentOutput) {
         hang.set(percentOutput*Constants.SLOW_HANG);
     }
@@ -173,6 +186,21 @@ public class Hanger extends SubsystemBase {
     public Command hangCommand(DoubleSupplier percentOutputSupplier) {
         return run(() -> setOutput(percentOutputSupplier.getAsDouble()));
     }
+
+    
+
+    public void setLatch(double position) {
+        latch.set(position); // HS-322HD has a range of 0-180 degrees
+        
+    }
+
+    public Command latchCommand(double position) {
+        return runOnce(() -> setLatch(position));
+    }
+
+
+
+    // -----------
 
     public boolean isHomed() {
         return isHomed;
@@ -192,7 +220,8 @@ public class Hanger extends SubsystemBase {
     @Override
     public void initSendable(SendableBuilder builder) {
         builder.addStringProperty("Command", () -> getCurrentCommand() != null ? getCurrentCommand().getName() : "null", null);
-        builder.addDoubleProperty("Extension (inches)", () -> motorAngleToExtension(motor.getPosition().getValue()).in(Inches), null);
-        builder.addDoubleProperty("Supply Current", () -> motor.getSupplyCurrent().getValue().in(Amps), null);
+        builder.addDoubleProperty("Hang Alt Encoder", () -> hang.getAlternateEncoder().getPosition(), null);
+        //builder.addDoubleProperty("Extension (inches)", () -> motorAngleToExtension(motor.getPosition().getValue()).in(Inches), null);
+        //builder.addDoubleProperty("Supply Current", () -> motor.getSupplyCurrent().getValue().in(Amps), null);
     }
 }

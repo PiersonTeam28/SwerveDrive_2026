@@ -106,6 +106,7 @@ public class RobotContainer {
     );
     private final SubsystemCommands subsystemCommands = new SubsystemCommands(
         swerve,
+        drivetrain,
         intake,
         floor,
         feeder,
@@ -185,15 +186,17 @@ public class RobotContainer {
         joystick1.y().onTrue(arm.upCommand()).onFalse(arm.stopCommand());
         joystick1.a().onTrue(arm.downCommand()).onFalse(arm.stopCommand());
 
-        // joystick1.y().onTrue(hood.positionCommand(0.7));
-        // joystick1.a().onTrue(hood.positionCommand(0.2));
+        joystick1.povUp().onTrue(hood.positionCommand(0.7));
+        joystick1.povDown().onTrue(hood.positionCommand(0.2));
 
-        
+        joystick1.povLeft().onTrue(hanger.latchCommand(0));
+        joystick1.povRight().onTrue(hanger.latchCommand(1));
+
 
 
         joystick1.b().onTrue(feeder.indexCommand()).onFalse(feeder.stopFeeder());
 
-        // hood.setDefaultCommand(hood.positionCommand(() -> joystick1.getRightY()));
+       // hood.setDefaultCommand(hood.positionCommand(() -> joystick1.getRightY()));
 
         joystick1.rightBumper().onTrue(subsystemCommands.shootManually()).onFalse(subsystemCommands.stopShooter().andThen(feeder.stopFeeder())); 
 
