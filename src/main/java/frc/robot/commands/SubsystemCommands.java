@@ -121,6 +121,10 @@ public final class SubsystemCommands {
             .handleInterrupt(() -> shooter.stop());
     }
 
+    public Command shootAuto() {
+        return feed1();
+    }
+
     private Command feed1() {
         return Commands.sequence(
             Commands.waitSeconds(0.25),

@@ -66,7 +66,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
  * </pre>
  */
 public class ShotCalculator {
-
+// 96 lbs 
   /** The result of calculate(). RPM to spin up, time of flight, heading to aim at, and a 0-100 confidence score. */
   public record LaunchParameters(
       double rpm,

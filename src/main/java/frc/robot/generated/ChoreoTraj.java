@@ -63,6 +63,20 @@ public record ChoreoTraj(
         new Pose2d(2.49839, 4.03528, Rotation2d.fromRadians(0)),
         new Pose2d(0.94136, 3.56436, Rotation2d.fromRadians(3.14159))
     );
+    public static final ChoreoTraj Shoot2 = new ChoreoTraj(
+        "Shoot2",
+        OptionalInt.empty(),
+        1.91545,
+        new Pose2d(12.99583, 7.20272, Rotation2d.fromRadians(0)),
+        new Pose2d(15.01842, 4.0704, Rotation2d.fromRadians(-3.13429))
+    );
+    public static final ChoreoTraj Shoot3 = new ChoreoTraj(
+        "Shoot3",
+        OptionalInt.empty(),
+        3.02668,
+        new Pose2d(14.12347, 2.94276, Rotation2d.fromRadians(2.73364)),
+        new Pose2d(12.97793, 7.22062, Rotation2d.fromRadians(0))
+    );
     public static final ChoreoTraj ShootRoutine = new ChoreoTraj(
         "ShootRoutine",
         OptionalInt.empty(),
@@ -88,6 +102,8 @@ public record ChoreoTraj(
         Map.entry("OutpostAndDepotTrajectory$1", OutpostAndDepotTrajectory$1),
         Map.entry("OutpostAndDepotTrajectory$2", OutpostAndDepotTrajectory$2),
         Map.entry("OutpostAndDepotTrajectory$3", OutpostAndDepotTrajectory$3),
+        Map.entry("Shoot2", Shoot2),
+        Map.entry("Shoot3", Shoot3),
         Map.entry("ShootRoutine", ShootRoutine),
         Map.entry("TEST", TEST)
     );

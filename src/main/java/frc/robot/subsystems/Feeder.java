@@ -37,7 +37,7 @@ import frc.robot.Constants;
 public class Feeder extends SubsystemBase {
     public enum Speed {
         FEED(5000*0.75),
-        AGIT(0.05);
+        AGIT(0.06);
 
         private final double rpm;
 
