@@ -22,6 +22,11 @@ import frc.util.ManualDriveInput;
 
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
+import frc.util.ShotCalculator.*;
+import frc.util.ProjectileSimulator.*;
+import frc.util.ShotCalculator;
+import frc.robot.Robot.*;
+
 
 // So this is aim and drive but with our swerve instead of the other one idk 
 
@@ -31,6 +36,12 @@ public class AimAndDriveCommand2 extends Command {
    // private final Swerve swerve;
     private final CommandSwerveDrivetrain drivetrain;
     private final DriveInputSmoother inputSmoother;
+
+    Config config = new Config();
+    public ShotCalculator calc = new ShotCalculator(config);
+
+
+
 
     private final SwerveRequest.FieldCentricFacingAngle fieldCentricFacingAngleRequest = new SwerveRequest.FieldCentricFacingAngle()
         .withRotationalDeadband(Driving.kPIDRotationDeadband)
@@ -42,6 +53,7 @@ public class AimAndDriveCommand2 extends Command {
 
     public AimAndDriveCommand2(
        // Swerve swerve,
+        
         CommandSwerveDrivetrain drivetrain,
         DoubleSupplier forwardInput,
         DoubleSupplier leftInput

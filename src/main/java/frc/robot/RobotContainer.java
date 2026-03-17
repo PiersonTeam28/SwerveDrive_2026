@@ -11,6 +11,7 @@ import static edu.wpi.first.units.Units.*;
 
 import frc.util.ProjectileSimulator;
 import frc.util.ShotCalculator;
+import frc.util.ShotCalculator.*;
 
 import java.util.Optional;
 import java.util.function.DoubleSupplier;
@@ -67,12 +68,17 @@ import frc.robot.Constants;
 public class RobotContainer {
 
     //Shot Calc stuff --------
-    //public ShotCalculator calc;
-    //public ShotCalculator.Config shotConfig = new ShotCalculator.Config();
-
-    //shotConfig.launcherFieldOffX() = 0;
+    
+    
+    
+    
 
     
+     
+
+    // Shoot against wall straight 3500 RPM works well
+    // 3100 against tower
+    // 2500 up against HUB
 
     //------
     
@@ -137,11 +143,15 @@ public class RobotContainer {
         () -> -joystick.getLeftX()
     );
 
+
+
     public RobotContainer() {
        // autoFactory = drivetrain.createAutoFactory();
         
         //autoChooser.addRoutine("simple", autoRoutines::simplePathAuto);
         //SmartDashboard.putData("Auto Chooser", autoChooser);
+
+        
 
 
         configureBindings();
@@ -210,6 +220,10 @@ public class RobotContainer {
         joystick1.povUp().onTrue(hood.positionCommand(0.7));
         joystick1.povDown().onTrue(hood.positionCommand(0.2));
 
+        joystick1.back().onTrue(hood.posCommandR(0.3)).onFalse(hood.posCommandR(0.7));
+
+        joystick1.start().onTrue(hood.posCommandL(0.3)).onFalse(hood.posCommandL(0.7));
+
         joystick1.povLeft().onTrue(hanger.latchCommand(0));
         joystick1.povRight().onTrue(hanger.latchCommand(1));
 
@@ -225,7 +239,7 @@ public class RobotContainer {
 
         //joystick1.b().onTrue(intake.testIntake(input)).onFalse(intake.testIntake(() -> 0));
 
-        joystick1.x().onTrue(intake.intakeCommand()).onFalse(intake.stopIntake());
+        joystick1.rightBumper().onTrue(intake.intakeCommand()).onFalse(intake.stopIntake());
 
         //arm.setDefaultCommand(arm.pivotCommand(() -> joystick1.getLeftY()));
 

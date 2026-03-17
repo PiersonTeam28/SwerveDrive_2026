@@ -83,6 +83,9 @@ public final class AutoRoutines {
         autoChooser.addRoutine("Shoot Routine", this::shootRoutine);
         autoChooser.addRoutine("Shoot2", this::shoot2);
         autoChooser.addRoutine("Shoot3", this::shoot3);
+        autoChooser.addRoutine("Hood Test", this::hoodTest);
+        autoChooser.addRoutine("Hood Test1", this::hoodTest1);
+        autoChooser.addRoutine("RedBumpRight", this::redBumpRight);
         SmartDashboard.putData("Auto Chooser", autoChooser);
         RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
     }
@@ -105,6 +108,7 @@ public final class AutoRoutines {
         final AutoTrajectory outpostToDepot = OutpostAndDepotTrajectory$1.asAutoTraj(routine);
         final AutoTrajectory depotToShootingPose = OutpostAndDepotTrajectory$2.asAutoTraj(routine);
         final AutoTrajectory shootingPoseToTower = OutpostAndDepotTrajectory$3.asAutoTraj(routine);
+
 
         routine.active().onTrue(
             Commands.sequence(
@@ -248,4 +252,48 @@ public final class AutoRoutines {
 
         return routine;
     }
+
+    public AutoRoutine hoodTest() {
+            final AutoRoutine routine = autoFactory.newRoutine("Hood Test");
+    
+            routine.active().onTrue(
+                hood.positionCommand(0.1).andThen(Commands.waitSeconds(1)).andThen(hood.positionCommand(0.5)).andThen(Commands.waitSeconds(1)).andThen(hood.positionCommand(0.3))
+            );
+    
+            return routine;
+    }
+
+    public AutoRoutine hoodTest1() {
+            final AutoRoutine routine = autoFactory.newRoutine("Hood Test1");
+    
+            routine.active().onTrue(
+                hood.goToMinR().andThen(hood.goToMaxR(), hood.goToMinL(), hood.goToMaxL(), Commands.print("Done"))
+            );
+    
+            return routine;
+    }
+
+    public AutoRoutine redBumpRight(){
+        final AutoRoutine routine = autoFactory.newRoutine("RedBumpRight");
+        final AutoTrajectory redBumpRightTraj = routine.trajectory("RedBumpRight");
+
+        routine.active().onTrue(
+            Commands.sequence(
+                redBumpRightTraj.resetOdometry(),
+                redBumpRightTraj.cmd()
+            )
+        );
+
+        redBumpRightTraj.active().whileTrue(limelight.idle());
+
+        redBumpRightTraj.atTime("Arm").onTrue(arm.downCommand().withTimeout(1).andThen(arm.stopCommand()));
+
+        redBumpRightTraj.atTime("Shoot").onTrue(subsystemCommands.shootAuto(3100));
+
+
+        return routine;
+    }
+
+    
+
 }

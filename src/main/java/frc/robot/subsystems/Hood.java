@@ -42,6 +42,8 @@ public class Hood extends SubsystemBase {
         rightServo.setBoundsMicroseconds(2000, 1800, 1500, 1200, 1000);
 
         setPosition(currentPosition);
+        //setPosR(currentPosition);
+        //setPosL(currentPosition);
         SmartDashboard.putData(this);
 
     }
@@ -49,15 +51,101 @@ public class Hood extends SubsystemBase {
     public void setPosition(double position) {
         final double clampedPosition = MathUtil.clamp(position, kMinPosition, kMaxPosition);
 
+        //leftServo.setPosition(clampedPosition);
+        //rightServo.setPosition(clampedPosition);
+
         leftServo.set(clampedPosition);
         rightServo.set(clampedPosition);
+
+        //leftServo.setSpeed((clampedPosition/kMaxPosition*2)-1);
+        //rightServo.setSpeed((clampedPosition/kMaxPosition*2)-1);
         targetPosition = clampedPosition;
     }
+
+    public void enableDeadbandElimination(boolean isEnabled) {
+        leftServo.enableDeadbandElimination(isEnabled);
+        rightServo.enableDeadbandElimination(isEnabled);
+    }
+
+    public void disableServo() {
+        leftServo.setDisabled();
+        rightServo.setDisabled();
+    }
+
+    public void zeroLatch() {
+        leftServo.setZeroLatch();
+        rightServo.setZeroLatch();
+    }
+
+    public void setHighMode() {
+        
+        leftServo.setAlwaysHighMode();
+        rightServo.setAlwaysHighMode();
+           
+    }
+
+    public int getRightPulseTime() {
+        return rightServo.getPulseTimeMicroseconds();
+    }
+
+    public int getLeftPulseTime() {
+        return leftServo.getPulseTimeMicroseconds();
+    }
+
+    public void setPosR(double pos) {
+        //leftServo.set(pos);
+        rightServo.set(pos);
+    }
+
+    public void setPosL(double pos) {
+        leftServo.set(pos);
+        //rightServo.set(pos);
+    }
+
+    public void setAngle(double angle) {
+        // Assuming the angle range corresponds to the position range linearly
+        leftServo.setAngle(angle);
+        rightServo.setAngle(angle);
+    }
+
+    public Command angleCommand(double angle) {
+        return runOnce(() -> setAngle(angle));
+    }
+
+    
+
 
     public Command positionCommand(double position) {
         return runOnce(() -> setPosition(position))
             .andThen(Commands.waitUntil(this::isPositionWithinTolerance));
     }
+
+    public Command goToMinR() {
+        return runOnce(()-> setPosR(0.0));
+    }
+
+     public Command goToMinL() {
+        return runOnce(()-> setPosL(0.0));
+    }
+
+    public Command goToMaxR() {
+        return runOnce(()-> setPosR(1.0));
+    }
+
+    public Command goToMaxL() {
+        return runOnce(()-> setPosL(1.0));
+    }
+
+    public Command posCommandL(double pos){
+        return runOnce(()-> setPosL(pos));
+    }
+
+    public Command posCommandR(double pos){
+        return runOnce(()-> setPosR(pos));
+    }
+
+     
+
 
     public boolean isPositionWithinTolerance() {
         return MathUtil.isNear(targetPosition, currentPosition, kPositionTolerance);
@@ -80,6 +168,7 @@ public class Hood extends SubsystemBase {
             : Math.max(targetPosition, currentPosition - maxPercentageTraveled);
     }
 
+
     @Override
     public void periodic() {
         updateCurrentPosition();
@@ -90,11 +179,11 @@ public class Hood extends SubsystemBase {
         builder.addStringProperty("Command", () -> getCurrentCommand() != null ? getCurrentCommand().getName() : "null", null);
         builder.addDoubleProperty("Current Position", () -> currentPosition, null);
         builder.addDoubleProperty("Target Position", () -> targetPosition, value -> setPosition(value));
-        builder.addDoubleProperty("Right Hood Position", () -> rightServo.getPosition(), null);
-        builder.addDoubleProperty("Left Hood Position", () -> leftServo.getPosition(), null);
-        builder.addDoubleProperty("Right Speed?", () -> rightServo.getSpeed(), null);
-        builder.addDoubleProperty("Left Speed?", () -> leftServo.getSpeed(), null);
-        builder.addStringProperty("R Get String", () -> rightServo.toString(), null);
-        builder.addBooleanProperty("Is Position Within Tolerance", () -> this.isPositionWithinTolerance(), null);
+       // builder.addDoubleProperty("Right Hood Position", () -> rightServo.getPosition(), null);
+       // builder.addDoubleProperty("Left Hood Position", () -> leftServo.getPosition(), null);
+        //builder.addDoubleProperty("Right Speed?", () -> rightServo.getSpeed(), null);
+       // builder.addDoubleProperty("Left Speed?", () -> leftServo.getSpeed(), null);
+       // builder.addStringProperty("R Get String", () -> rightServo.toString(), null);
+        //builder.addBooleanProperty("Is Position Within Tolerance", () -> this.isPositionWithinTolerance(), null);
     }
 }

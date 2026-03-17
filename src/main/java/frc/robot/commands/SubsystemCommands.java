@@ -15,6 +15,8 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Arm;
 
+
+
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 public final class SubsystemCommands {
@@ -121,8 +123,8 @@ public final class SubsystemCommands {
             .handleInterrupt(() -> shooter.stop());
     }
 
-    public Command shootAuto() {
-        return feed1();
+    public Command shootAuto(double rpm) {
+        return shooter.spinUpCommand(rpm).andThen(feed1());
     }
 
     private Command feed1() {

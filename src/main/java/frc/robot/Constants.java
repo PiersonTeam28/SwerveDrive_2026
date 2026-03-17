@@ -25,7 +25,7 @@ public class Constants {
 
     public static final AngularVelocity kPivotRPM = RPM.of(6000);
 
-    public static final double SLOW = 0.25;
+    public static final double SLOW = 0.50;
 
     public static final double SLOW_SHOOT = 0.5;
 
@@ -68,8 +68,8 @@ public class Constants {
     // PWM IDS
 
 
-    public static final int HOOD_L = 0;
-    public static final int HOOD_R = 1;
+    public static final int HOOD_L = 8;
+    public static final int HOOD_R = 9;
 
     public static final int LATCH = 2;
     
