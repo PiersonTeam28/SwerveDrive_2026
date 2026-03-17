@@ -5,7 +5,12 @@
 
 package frc.robot;
 
+import frc.robot.Robot;
+
 import static edu.wpi.first.units.Units.*;
+
+import frc.util.ProjectileSimulator;
+import frc.util.ShotCalculator;
 
 import java.util.Optional;
 import java.util.function.DoubleSupplier;
@@ -57,7 +62,19 @@ import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Feeder.Speed;
 import frc.util.SwerveTelemetry;
 
+import frc.robot.Constants;
+
 public class RobotContainer {
+
+    //Shot Calc stuff --------
+    //public ShotCalculator calc;
+    //public ShotCalculator.Config shotConfig = new ShotCalculator.Config();
+
+    //shotConfig.launcherFieldOffX() = 0;
+
+    
+
+    //------
     
     private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond) * Constants.SLOW; // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
@@ -75,6 +92,8 @@ public class RobotContainer {
     private final CommandXboxController joystick1 = new CommandXboxController(1);
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+
+    
 
 
     //private final AutoFactory autoFactory;
@@ -127,6 +146,8 @@ public class RobotContainer {
 
         configureBindings();
         autoRoutines.configure();
+        
+
     }
 
     /**

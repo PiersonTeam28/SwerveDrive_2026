@@ -32,6 +32,37 @@ public class Constants {
     public static final double SLOW_HANG = 0.25;
 
     //public static final double INTAKE = 0.5;
+
+
+    //Shoot Calc Stuff
+
+    public static final double SHOOTER_OFFSET_X = 0.23;
+    public static final double SHOOTER_OFFSET_Y = 0;
+
+    public static final double ROBOT_WEIGHT = 50.10;
+
+    public static final double BALL_MASS = 0.215;
+    public static final double BALL_DIAMETER = 0.1501;
+    public static final double DRAG_COEFF = 0.47;
+    public static final double MAGNUS_COEFF = 0.2;
+    public static final double AIR_DENSITY = 1.225;
+
+    public static final double EXIT_HEIGHT = 0.43;
+    public static final double WHEEL_DIAMETER = 0.1016;
+
+    public static final double TARGET_HEIGHT = 1.83;
+
+    public static final double SLIP_FACTOR = 0.6;
+    public static final double LAUNCH_ANGLE = 45.0;
+    public static final double SIM_TIMESTEP = 0.001;
+    
+    public static final double MIN_RPM = 1500;
+    public static final double MAX_RPM = 6000;
+
+    public static final int SEARCH_ITERS = 25;
+    public static final double MAX_SIM_TIME = 5.0;
+
+
     
 
     // PWM IDS
