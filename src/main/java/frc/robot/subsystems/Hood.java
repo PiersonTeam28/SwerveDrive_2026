@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.Constants;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -34,8 +35,8 @@ public class Hood extends SubsystemBase {
     private Time lastUpdateTime = Seconds.of(0);
 
     public Hood() {
-        leftServo = new Servo(0);
-        rightServo = new Servo(1);
+        leftServo = new Servo(Constants.HOOD_L);
+        rightServo = new Servo(Constants.HOOD_R);
 
         leftServo.setBoundsMicroseconds(2000, 1800, 1500, 1200, 1000);
         rightServo.setBoundsMicroseconds(2000, 1800, 1500, 1200, 1000);
@@ -89,5 +90,11 @@ public class Hood extends SubsystemBase {
         builder.addStringProperty("Command", () -> getCurrentCommand() != null ? getCurrentCommand().getName() : "null", null);
         builder.addDoubleProperty("Current Position", () -> currentPosition, null);
         builder.addDoubleProperty("Target Position", () -> targetPosition, value -> setPosition(value));
+        builder.addDoubleProperty("Right Hood Position", () -> rightServo.getPosition(), null);
+        builder.addDoubleProperty("Left Hood Position", () -> leftServo.getPosition(), null);
+        builder.addDoubleProperty("Right Speed?", () -> rightServo.getSpeed(), null);
+        builder.addDoubleProperty("Left Speed?", () -> leftServo.getSpeed(), null);
+        builder.addStringProperty("R Get String", () -> rightServo.toString(), null);
+        builder.addBooleanProperty("Is Position Within Tolerance", () -> this.isPositionWithinTolerance(), null);
     }
 }
