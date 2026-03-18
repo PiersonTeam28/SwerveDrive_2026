@@ -63,19 +63,12 @@ public record ChoreoTraj(
         new Pose2d(2.49839, 4.03528, Rotation2d.fromRadians(0)),
         new Pose2d(0.94136, 3.56436, Rotation2d.fromRadians(3.14159))
     );
-    public static final ChoreoTraj ShootRoutine = new ChoreoTraj(
-        "ShootRoutine",
+    public static final ChoreoTraj RedBumpRight = new ChoreoTraj(
+        "RedBumpRight",
         OptionalInt.empty(),
-        7.56013,
-        new Pose2d(3.59816, 0.63985, Rotation2d.fromRadians(3.14159)),
-        new Pose2d(0.89678, 2.78399, Rotation2d.fromRadians(3.14159))
-    );
-    public static final ChoreoTraj TEST = new ChoreoTraj(
-        "TEST",
-        OptionalInt.empty(),
-        4.36109,
-        new Pose2d(3.48462, 6.35716, Rotation2d.fromRadians(0)),
-        new Pose2d(1.07003, 4.76547, Rotation2d.fromRadians(0))
+        0.49639,
+        new Pose2d(13.0008, 6.0556, Rotation2d.fromRadians(-1.5708)),
+        new Pose2d(13.1821, 5.97192, Rotation2d.fromRadians(-2.09094))
     );
     public static final ChoreoTraj Shoot2 = new ChoreoTraj(
         "Shoot2",
@@ -91,12 +84,33 @@ public record ChoreoTraj(
         new Pose2d(14.12347, 2.94276, Rotation2d.fromRadians(2.73364)),
         new Pose2d(12.97793, 7.22062, Rotation2d.fromRadians(0))
     );
-    public static final ChoreoTraj RedBumpRight = new ChoreoTraj(
-        "RedBumpRight",
+    public static final ChoreoTraj ShootRoutine = new ChoreoTraj(
+        "ShootRoutine",
         OptionalInt.empty(),
-        0.50735,
-        new Pose2d(13.0008, 6.0556, Rotation2d.fromRadians(-1.5708)),
-        new Pose2d(13.1821, 5.97192, Rotation2d.fromRadians(-2.15377))
+        7.56013,
+        new Pose2d(3.59816, 0.63985, Rotation2d.fromRadians(3.14159)),
+        new Pose2d(0.89678, 2.78399, Rotation2d.fromRadians(3.14159))
+    );
+    public static final ChoreoTraj TEST = new ChoreoTraj(
+        "TEST",
+        OptionalInt.empty(),
+        4.36109,
+        new Pose2d(3.48462, 6.35716, Rotation2d.fromRadians(0)),
+        new Pose2d(1.07003, 4.76547, Rotation2d.fromRadians(0))
+    );
+    public static final ChoreoTraj RedMid = new ChoreoTraj(
+        "RedMid",
+        OptionalInt.empty(),
+        2.42779,
+        new Pose2d(12.98256, 4.01807, Rotation2d.fromRadians(3.14159)),
+        new Pose2d(13.10137, 4.0153, Rotation2d.fromRadians(3.14159))
+    );
+    public static final ChoreoTraj RedMid_copy1 = new ChoreoTraj(
+        "RedMid_copy1",
+        OptionalInt.empty(),
+        1.342,
+        new Pose2d(12.98256, 4.01807, Rotation2d.fromRadians(3.14159)),
+        new Pose2d(14.92612, 4.01807, Rotation2d.fromRadians(3.14159))
     );
 
     /**
@@ -109,11 +123,13 @@ public record ChoreoTraj(
         Map.entry("OutpostAndDepotTrajectory$1", OutpostAndDepotTrajectory$1),
         Map.entry("OutpostAndDepotTrajectory$2", OutpostAndDepotTrajectory$2),
         Map.entry("OutpostAndDepotTrajectory$3", OutpostAndDepotTrajectory$3),
-        Map.entry("ShootRoutine", ShootRoutine),
-        Map.entry("TEST", TEST),
+        Map.entry("RedBumpRight", RedBumpRight),
         Map.entry("Shoot2", Shoot2),
         Map.entry("Shoot3", Shoot3),
-        Map.entry("RedBumpRight", RedBumpRight)
+        Map.entry("ShootRoutine", ShootRoutine),
+        Map.entry("TEST", TEST),
+        Map.entry("RedMid", RedMid),
+        Map.entry("RedMid_copy1", RedMid_copy1)
     );
 
     /**

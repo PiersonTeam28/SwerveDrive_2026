@@ -78,6 +78,10 @@ public class Arm extends SubsystemBase {
 
     private static final double SLOWL = 1;
 
+    private double lowLimit;
+    private double upLimit;
+    private double LOW = 0.23;
+
     private static final double kMaxPV = kMaxPivotVelocity.in(RPM)* SLOWL; // to double?
     private static final double kMaxPA = kMaxPivotVelocity.in(RotationsPerSecond) * SLOWL; // to double?
 
@@ -163,7 +167,8 @@ public class Arm extends SubsystemBase {
         pivot.configure(pivotConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         
-        
+        this.setHigh(pivot.getAlternateEncoder().getPosition());
+        this.setLow(upLimit + LOW);
 
     }
 
@@ -184,11 +189,17 @@ public class Arm extends SubsystemBase {
     //     return currentPos.isNear(targetPos, kPositionTolerance);
     // }
 
+    private void setLow(double low){
+        lowLimit = low;
+    }
 
+    private void setHigh(double high){
+        upLimit = high;
+    }
 
     private boolean upperLimit() {
         // Implement logic to check if the pivot has reached its upper limit
-        if (pivot.getAlternateEncoder().getPosition() <= 0.003) {
+        if (pivot.getAlternateEncoder().getPosition() <= upLimit) {
             // this.getCurrentCommand().cancel();
             // runOnce(() -> stopCommand());
             return true;        
@@ -199,7 +210,7 @@ public class Arm extends SubsystemBase {
     }
     private boolean lowerLimit() {
         // Implement logic to check if the pivot has reached its lower limit
-        if (pivot.getAlternateEncoder().getPosition() >= 0.247) {
+        if (pivot.getAlternateEncoder().getPosition() >= lowLimit) {
             // this.getCurrentCommand().cancel();
             // runOnce(() -> stopCommand());
             return true;
@@ -254,6 +265,11 @@ public class Arm extends SubsystemBase {
         // builder.addDoubleProperty("Angle (degrees)", () -> pivotMotor.getPosition().getValue().in(Degrees), null);
 
         builder.addDoubleProperty("Alt Encoder Position", () -> pivot.getAlternateEncoder().getPosition(), null);
+
+        builder.addDoubleProperty("Set Upper Limit", null, value -> setHigh(value));
+        builder.addDoubleProperty("Set Lower Limit", null, value -> setLow(value));
+
+
         //builder.addDoubleProperty("Primary Encoder Position", () -> pivot.getEncoder().getPosition(), null);
         //builder.addDoubleProperty("Absolute Encoder Position", () -> pivot.getAbsoluteEncoder().getPosition(), null);
 

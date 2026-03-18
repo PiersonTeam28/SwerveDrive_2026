@@ -235,11 +235,11 @@ public class RobotContainer {
 
         joystick1.rightBumper().onTrue(subsystemCommands.shootManually()).onFalse(subsystemCommands.stopShooter().andThen(feeder.stopFeeder())); 
 
-        joystick.leftBumper().onTrue(shooter.stopCommand());
+        //joystick.leftBumper().onTrue(shooter.stopCommand());
 
         //joystick1.b().onTrue(intake.testIntake(input)).onFalse(intake.testIntake(() -> 0));
 
-        joystick1.rightBumper().onTrue(intake.intakeCommand()).onFalse(intake.stopIntake());
+        joystick1.leftBumper().onTrue(intake.intakeCommand()).onFalse(intake.stopIntake());
 
         //arm.setDefaultCommand(arm.pivotCommand(() -> joystick1.getLeftY()));
 

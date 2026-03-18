@@ -86,6 +86,7 @@ public final class AutoRoutines {
         autoChooser.addRoutine("Hood Test", this::hoodTest);
         autoChooser.addRoutine("Hood Test1", this::hoodTest1);
         autoChooser.addRoutine("RedBumpRight", this::redBumpRight);
+        autoChooser.addRoutine("RedMid", this::redMid);
         SmartDashboard.putData("Auto Chooser", autoChooser);
         RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
     }
@@ -286,9 +287,32 @@ public final class AutoRoutines {
 
         redBumpRightTraj.active().whileTrue(limelight.idle());
 
-        redBumpRightTraj.atTime("Arm").onTrue(arm.downCommand().withTimeout(1).andThen(arm.stopCommand()));
+        redBumpRightTraj.atTime("Arm").onTrue(arm.downCommand().withTimeout(1.5).andThen(arm.stopCommand()));
 
-        redBumpRightTraj.atTime("Shoot").onTrue(subsystemCommands.shootAuto(3100));
+        redBumpRightTraj.atTime("Shoot").onTrue(subsystemCommands.shootAuto(3100).withTimeout(6).andThen(subsystemCommands.stopShooter()));
+
+
+        return routine;
+    }
+
+    public AutoRoutine redMid(){
+        final AutoRoutine routine = autoFactory.newRoutine("RedMid");
+        final AutoTrajectory redMidTraj = routine.trajectory("RedMid");
+
+        routine.active().onTrue(
+            Commands.sequence(
+                redMidTraj.resetOdometry(),
+                redMidTraj.cmd()
+            )
+        );
+
+        redMidTraj.active().whileTrue(limelight.idle());
+
+        redMidTraj.atTime("Arm").onTrue(arm.downCommand().withTimeout(1.5).andThen(arm.stopCommand()));
+
+        redMidTraj.atTime("Shoot").onTrue(subsystemCommands.shootAuto(2500));
+
+        //redMidTraj.done(subsystemCommands.stopShooter());
 
 
         return routine;
