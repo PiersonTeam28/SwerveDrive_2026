@@ -35,9 +35,11 @@ import frc.robot.Constants.KrakenX60;
 import frc.robot.Constants;
 
 public class Feeder extends SubsystemBase {
+    private double agitSpeed = 0.05;
+    
     public enum Speed {
         FEED(5000*0.75),
-        AGIT(0.06);
+        AGIT(0.2);
 
         private final double rpm;
 
@@ -140,7 +142,7 @@ public class Feeder extends SubsystemBase {
 
 
     public Command indexCommand() {
-        return startEnd(() -> {this.setAgitator(0.05);
+        return startEnd(() -> {this.setAgitator(agitSpeed);
         this.set(Speed.FEED);}, () -> {
             this.setPercentOutput(0);
             this.setAgitator(0);
@@ -156,6 +158,12 @@ public class Feeder extends SubsystemBase {
     @Override
     public void initSendable(SendableBuilder builder) {
         builder.addStringProperty("Command", () -> getCurrentCommand() != null ? getCurrentCommand().getName() : "null", null);
+        
+        
+        builder.addDoubleProperty("L Current", () -> agitatorMotorL.getOutputCurrent(), null);
+        builder.addDoubleProperty("R Current", () -> agitatorMotorR.getOutputCurrent(), null);
+        builder.addDoubleProperty("Agit Speed", () -> agitSpeed, value -> agitSpeed = value);
+
         builder.addDoubleProperty("RPM", () -> feederMotor.getVelocity().getValue().in(RPM), null);
         builder.addDoubleProperty("Stator Current", () -> feederMotor.getStatorCurrent().getValue().in(Amps), null);
         builder.addDoubleProperty("Supply Current", () -> feederMotor.getSupplyCurrent().getValue().in(Amps), null);

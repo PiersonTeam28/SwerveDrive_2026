@@ -88,14 +88,22 @@ public class Shooter extends SubsystemBase {
             );
         }
     }
-
+    // 0.4 value... is this good? should it be faster?
     public void setPercentOutput(double percentOutput) {
         for (final TalonFX motor : motors) {
             motor.setControl(
                 voltageRequest
-                    .withOutput(Volts.of(percentOutput * 12.0 *0.4))
+                    .withOutput(Volts.of(percentOutput * 12.0 *0.4)) //removed 0.4 multiplier
             );
         }
+    }
+
+    public void setDashboardRPM(double rpm){
+        dashboardTargetRPM = rpm;
+    }
+
+    public Command setDashboardRPMCommand(double rpm){
+        return runOnce(() -> setDashboardRPM(rpm));
     }
 
     public void stop() {

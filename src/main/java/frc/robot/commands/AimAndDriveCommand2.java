@@ -21,11 +21,13 @@ import frc.util.GeometryUtil;
 import frc.util.ManualDriveInput;
 
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+//import frc.robot.subsystems.Shooter;
 
 import frc.util.ShotCalculator.*;
 import frc.util.ProjectileSimulator.*;
 import frc.util.ShotCalculator;
 import frc.robot.Robot.*;
+
 
 
 // So this is aim and drive but with our swerve instead of the other one idk 
@@ -35,10 +37,13 @@ public class AimAndDriveCommand2 extends Command {
 
    // private final Swerve swerve;
     private final CommandSwerveDrivetrain drivetrain;
+   // private final Shooter shooter;
     private final DriveInputSmoother inputSmoother;
 
+    //GeneratedLUT lut = new GeneratedLUT(null, null, 0, 0, 0, 0);
+    GeneratedLUT lut;
     Config config = new Config();
-    public ShotCalculator calc = new ShotCalculator(config);
+    private ShotCalculator calc = new ShotCalculator(config);
 
 
 
@@ -63,6 +68,15 @@ public class AimAndDriveCommand2 extends Command {
         this.inputSmoother = new DriveInputSmoother(forwardInput, leftInput);
         //addRequirements(swerve);
             addRequirements(drivetrain);
+        
+
+        //lut stuff
+        for(var entry : lut.entries()) {
+            if(entry.reachable()){
+                calc.loadLUTEntry(entry.distanceM(), entry.rpm(), entry.tof());
+            }
+        }
+        //---//
     }
 
     public AimAndDriveCommand2(CommandSwerveDrivetrain drivetrain) {
@@ -94,6 +108,20 @@ public class AimAndDriveCommand2 extends Command {
                 .withTargetDirection(getDirectionToHub())
         );
     }
+
+    //method for calc
+    // public void shotCalc(){
+    // ShotCalculator.ShotInputs inputs = new ShotCalculator.ShotInputs(
+    //     drivetrain.getPose(), drivetrain.getFieldVelocity(), drivetrain.getRobotVelocity(),
+    //     hubCenter, hubForwardVector, visionConfidence
+    // );
+    // ShotCalculator.LaunchParameters result = calc.calculate(inputs);
+    // if (result.isValid() && result.confidence() > 50) {
+    //     shooter.setRPM(result.rpm());
+    //     drivetrain.setHeading(result.driveAngle());
+    // }
+    // }
+    
 
     @Override
     public boolean isFinished() {

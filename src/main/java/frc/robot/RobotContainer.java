@@ -209,6 +209,14 @@ public class RobotContainer {
         // Reset the field-centric heading on left bumper press.
         joystick.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
+
+        // d pad or pov pad arrow pad preset rpms
+
+        joystick.povUp().onTrue(shooter.setDashboardRPMCommand(2500));
+        joystick.povRight().onTrue(shooter.setDashboardRPMCommand(3100));
+        joystick.povDown().onTrue(shooter.setDashboardRPMCommand(3500));
+        joystick.povLeft().onTrue(shooter.setDashboardRPMCommand(3000));
+
         drivetrain.registerTelemetry(logger::telemeterize);
 
         //-----------------------------Subsystem Bindings------------------//
@@ -217,13 +225,21 @@ public class RobotContainer {
         joystick1.y().onTrue(arm.upCommand()).onFalse(arm.stopCommand());
         joystick1.a().onTrue(arm.downCommand()).onFalse(arm.stopCommand());
 
-        joystick1.povUp().onTrue(hood.positionCommand(0.7));
-        joystick1.povDown().onTrue(hood.positionCommand(0.2));
+        //HOOD
+        joystick1.povUp().onTrue(hood.positionCommand(0.4));
+        joystick1.povDown().onTrue(hood.positionCommand(0));
 
-        joystick1.back().onTrue(hood.posCommandR(0.3)).onFalse(hood.posCommandR(0.7));
+        //joystick1.back().onTrue(hood.positionCommand(0));
 
-        joystick1.start().onTrue(hood.posCommandL(0.3)).onFalse(hood.posCommandL(0.7));
+        
 
+        //NEW HOOD TEST COMMANDS
+        //joystick1.back().onTrue(hood.posCommandR(0.3)).onFalse(hood.posCommandR(0.7));
+
+        //joystick1.start().onTrue(hood.posCommandL(0.3)).onFalse(hood.posCommandL(0.7));
+
+
+        //HANG LATCH
         joystick1.povLeft().onTrue(hanger.latchCommand(0));
         joystick1.povRight().onTrue(hanger.latchCommand(1));
 

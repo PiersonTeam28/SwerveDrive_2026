@@ -29,7 +29,7 @@ public class Constants {
 
     public static final double SLOW_SHOOT = 0.5;
 
-    public static final double SLOW_HANG = 0.25;
+    public static final double SLOW_HANG = 0.5;
 
     //public static final double INTAKE = 0.5;
 
@@ -63,7 +63,33 @@ public class Constants {
     public static final double MAX_SIM_TIME = 5.0;
 
 
-    
+    // Limelight Distances
+
+    /** Limelight pose is offset on the robot so we need to measure this offset
+     * 
+     * We need exact dimensions of the robot and the offset for the shooter and limelight
+     * 
+     * Also need the angle that the limelight is oriented. 
+     * 
+     * How does the hood change the angle of the shot?
+     * 
+     * Why is the limelight pose the only one we see on the field 2d?
+     * 
+     * tx, ty, tl to actual distance values, then compare to real field measurements?
+     * 
+     * 
+     * Second camera? that works with the limelight? Streams data to limelight? or possibly hard coded distance calculation?
+     * Possible to use the LIDAR? For short distance 2m and under to compare to limelight data?
+     * 
+     * Odometry pose compared to limelight pose for accurate pose estimation? 
+     * 
+     * Auto code for BLUE and RED - Right, Mid, Left
+     * 
+     * Figure out how to make the choreo longer so that it doesnt give an error. We need to stop the shooter. 
+     * 
+     */
+
+    //public static final double
 
     // PWM IDS
 

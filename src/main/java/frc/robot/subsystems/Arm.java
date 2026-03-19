@@ -197,6 +197,13 @@ public class Arm extends SubsystemBase {
         upLimit = high;
     }
 
+    private double getDifference(){
+        double difference = upLimit - pivot.getAlternateEncoder().getPosition();
+        
+        return difference;
+        
+    }
+
     private boolean upperLimit() {
         // Implement logic to check if the pivot has reached its upper limit
         if (pivot.getAlternateEncoder().getPosition() <= upLimit) {
@@ -255,6 +262,8 @@ public class Arm extends SubsystemBase {
 
 
 
+
+
     
 
    
@@ -265,7 +274,7 @@ public class Arm extends SubsystemBase {
         // builder.addDoubleProperty("Angle (degrees)", () -> pivotMotor.getPosition().getValue().in(Degrees), null);
 
         builder.addDoubleProperty("Alt Encoder Position", () -> pivot.getAlternateEncoder().getPosition(), null);
-
+        builder.addDoubleProperty("Difference", () -> this.getDifference(), null);
         builder.addDoubleProperty("Set Upper Limit", null, value -> setHigh(value));
         builder.addDoubleProperty("Set Lower Limit", null, value -> setLow(value));
 
