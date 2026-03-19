@@ -287,9 +287,11 @@ public final class AutoRoutines {
 
         redBumpRightTraj.active().whileTrue(limelight.idle());
 
-        redBumpRightTraj.atTime("Arm").onTrue(arm.downCommand().withTimeout(1.5).andThen(arm.stopCommand()));
+        redBumpRightTraj.atTime("Arm").onTrue(arm.downCommand().withTimeout(2).andThen(arm.stopCommand()));
 
-        redBumpRightTraj.atTime("Shoot").onTrue(subsystemCommands.shootAuto(3100).withTimeout(6).andThen(subsystemCommands.stopShooter()));
+        redBumpRightTraj.atTime("Shoot").onTrue(subsystemCommands.shootAuto(3100));
+
+        redBumpRightTraj.atTimeBeforeEnd(0.25).onTrue(subsystemCommands.stopShooter());
 
 
         return routine;
@@ -308,7 +310,7 @@ public final class AutoRoutines {
 
         redMidTraj.active().whileTrue(limelight.idle());
 
-        redMidTraj.atTime("Arm").onTrue(arm.downCommand().withTimeout(1.5).andThen(arm.stopCommand()));
+        redMidTraj.atTime("Arm").onTrue(arm.downCommand().withTimeout(2).andThen(arm.stopCommand()));
 
         redMidTraj.atTime("Shoot").onTrue(subsystemCommands.shootAuto(2500));
 

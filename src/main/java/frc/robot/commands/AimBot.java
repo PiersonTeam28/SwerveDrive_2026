@@ -98,7 +98,7 @@ public class AimBot extends Command {
 
     //method for calc
     // Shot Inputs are Pose, field Velocity, Robot velocity, hubCenter, hubForward Vector, vision confidence
-    // public void shotCalc(){
+    // public void shotCalc() {
     // ShotCalculator.ShotInputs inputs = new ShotCalculator.ShotInputs(
     //     swerve.getState().Pose, swerve.getState().Speeds.fromRobotRelativeSpeeds(swerve.getState().Speeds, swerve.getState().Pose.getRotation()), swerve.getState().Speeds,
     //     hubCenter, hubForwardVector, visionConfidence
@@ -106,7 +106,7 @@ public class AimBot extends Command {
     // ShotCalculator.LaunchParameters result = calc.calculate(inputs);
     // if (result.isValid() && result.confidence() > 50) {
     //     shooter.setRPM(result.rpm());
-    //     swerve.setHeading(result.driveAngle());
+    //     swerve.getState().setHeading(result.driveAngle());
     // }
     // }
 

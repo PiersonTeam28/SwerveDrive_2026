@@ -68,7 +68,7 @@ public class Feeder extends SubsystemBase {
 
         final SparkMaxConfig agitatorConfig = new SparkMaxConfig();
 
-        agitatorConfig.smartCurrentLimit(20).idleMode(IdleMode.kBrake);
+        agitatorConfig.smartCurrentLimit(Constants.AGIT_STALL).idleMode(IdleMode.kBrake);
         
         agitatorMotorL.configure(agitatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         agitatorMotorR.configure(agitatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -81,9 +81,9 @@ public class Feeder extends SubsystemBase {
             )
             .withCurrentLimits(
                 new CurrentLimitsConfigs()
-                    .withStatorCurrentLimit(Amps.of(120))
+                    .withStatorCurrentLimit(Amps.of(Constants.FEED_STATOR))
                     .withStatorCurrentLimitEnable(true)
-                    .withSupplyCurrentLimit(Amps.of(50))
+                    .withSupplyCurrentLimit(Amps.of(Constants.FEED_SUPPLY))
                     .withSupplyCurrentLimitEnable(true)
             )
             .withSlot0(

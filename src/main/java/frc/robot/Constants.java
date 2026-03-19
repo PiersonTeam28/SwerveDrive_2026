@@ -23,6 +23,8 @@ public class Constants {
         public static final AngularVelocity kFreeSpeed = RPM.of(6000);
     }
 
+
+
     public static final AngularVelocity kPivotRPM = RPM.of(6000);
 
     public static final double SLOW = 0.50;
@@ -30,6 +32,43 @@ public class Constants {
     public static final double SLOW_SHOOT = 0.5;
 
     public static final double SLOW_HANG = 0.5;
+
+
+    //Constants for current management
+    //Shooter KRAKEN
+    public static final double  SHOOT_STATOR = 120;
+    public static final double  SHOOT_SUPPLY = 70;
+    public static final double  SHOOT_LOWER = 55;
+
+    //Feeder Roller KRAKEN
+
+    public static final double  FEED_STATOR = 120;
+    public static final double  FEED_SUPPLY = 50;
+    public static final double  FEED_LOWER = 35;
+
+    //Agitators NEO
+
+    public static final int  AGIT_STALL = 20;
+
+    //Intake 
+
+    public static final double  INTAKE_STATOR = 120;
+    public static final double  INTAKE_SUPPLY = 50;
+    public static final double  INTAKE_LOWER = 35;
+
+    //Arm NEO
+
+    public static final int  ARM_STALL = 40;
+
+    //Hanger NEO
+
+    public static final int  HANG_STALL = 40;
+
+    //Drive KRAKEN, probably not necessary
+
+
+
+
 
     //public static final double INTAKE = 0.5;
 

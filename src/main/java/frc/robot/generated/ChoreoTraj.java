@@ -66,9 +66,16 @@ public record ChoreoTraj(
     public static final ChoreoTraj RedBumpRight = new ChoreoTraj(
         "RedBumpRight",
         OptionalInt.empty(),
-        0.49639,
+        1.72902,
         new Pose2d(13.0008, 6.0556, Rotation2d.fromRadians(-1.5708)),
-        new Pose2d(13.1821, 5.97192, Rotation2d.fromRadians(-2.09094))
+        new Pose2d(13.17645, 5.87297, Rotation2d.fromRadians(-2.22422))
+    );
+    public static final ChoreoTraj RedMid = new ChoreoTraj(
+        "RedMid",
+        OptionalInt.empty(),
+        2.42779,
+        new Pose2d(12.98256, 4.01807, Rotation2d.fromRadians(3.14159)),
+        new Pose2d(13.10137, 4.0153, Rotation2d.fromRadians(3.14159))
     );
     public static final ChoreoTraj Shoot2 = new ChoreoTraj(
         "Shoot2",
@@ -98,20 +105,6 @@ public record ChoreoTraj(
         new Pose2d(3.48462, 6.35716, Rotation2d.fromRadians(0)),
         new Pose2d(1.07003, 4.76547, Rotation2d.fromRadians(0))
     );
-    public static final ChoreoTraj RedMid = new ChoreoTraj(
-        "RedMid",
-        OptionalInt.empty(),
-        2.42779,
-        new Pose2d(12.98256, 4.01807, Rotation2d.fromRadians(3.14159)),
-        new Pose2d(13.10137, 4.0153, Rotation2d.fromRadians(3.14159))
-    );
-    public static final ChoreoTraj RedMid_copy1 = new ChoreoTraj(
-        "RedMid_copy1",
-        OptionalInt.empty(),
-        1.342,
-        new Pose2d(12.98256, 4.01807, Rotation2d.fromRadians(3.14159)),
-        new Pose2d(14.92612, 4.01807, Rotation2d.fromRadians(3.14159))
-    );
 
     /**
      * A map between trajectory names and their corresponding data.
@@ -124,12 +117,11 @@ public record ChoreoTraj(
         Map.entry("OutpostAndDepotTrajectory$2", OutpostAndDepotTrajectory$2),
         Map.entry("OutpostAndDepotTrajectory$3", OutpostAndDepotTrajectory$3),
         Map.entry("RedBumpRight", RedBumpRight),
+        Map.entry("RedMid", RedMid),
         Map.entry("Shoot2", Shoot2),
         Map.entry("Shoot3", Shoot3),
         Map.entry("ShootRoutine", ShootRoutine),
-        Map.entry("TEST", TEST),
-        Map.entry("RedMid", RedMid),
-        Map.entry("RedMid_copy1", RedMid_copy1)
+        Map.entry("TEST", TEST)
     );
 
     /**

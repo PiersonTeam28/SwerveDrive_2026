@@ -13,6 +13,7 @@ import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
+import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.Arm;
 
 
@@ -124,7 +125,8 @@ public final class SubsystemCommands {
     }
 
     public Command shootAuto(double rpm) {
-        return shooter.spinUpCommand(rpm).andThen(feed1());
+        //LimelightHelpers.
+        return shooter.spinUpCommand(rpm).andThen(Commands.waitSeconds(1), feed1());
     }
 
     private Command feed1() {

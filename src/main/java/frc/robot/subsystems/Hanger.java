@@ -99,7 +99,7 @@ public class Hanger extends SubsystemBase {
 
         final SparkMaxConfig hangConfig = new SparkMaxConfig();
 
-        hangConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(40);
+        hangConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(Constants.HANG_STALL);
         hangConfig.alternateEncoder.countsPerRevolution(8192);
 
         hang.configure(hangConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
