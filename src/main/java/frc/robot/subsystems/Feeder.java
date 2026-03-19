@@ -160,9 +160,9 @@ public class Feeder extends SubsystemBase {
         builder.addStringProperty("Command", () -> getCurrentCommand() != null ? getCurrentCommand().getName() : "null", null);
         
         
-        builder.addDoubleProperty("L Current", () -> agitatorMotorL.getOutputCurrent(), null);
-        builder.addDoubleProperty("R Current", () -> agitatorMotorR.getOutputCurrent(), null);
-        builder.addDoubleProperty("Agit Speed", () -> agitSpeed, value -> agitSpeed = value);
+       // builder.addDoubleProperty("L Current", () -> agitatorMotorL.getOutputCurrent(), null);
+       // builder.addDoubleProperty("R Current", () -> agitatorMotorR.getOutputCurrent(), null);
+       // builder.addDoubleProperty("Agit Speed", () -> agitSpeed, value -> agitSpeed = value);
 
         builder.addDoubleProperty("RPM", () -> feederMotor.getVelocity().getValue().in(RPM), null);
         builder.addDoubleProperty("Stator Current", () -> feederMotor.getStatorCurrent().getValue().in(Amps), null);
