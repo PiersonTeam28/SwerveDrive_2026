@@ -38,7 +38,7 @@ public class Shooter extends SubsystemBase {
     private final VelocityVoltage velocityRequest = new VelocityVoltage(0).withSlot(0);
     private final VoltageOut voltageRequest = new VoltageOut(0);
 
-    private double dashboardTargetRPM = 3500;
+    private double dashboardTargetRPM = 3100;
 
     public Shooter() {
         leftMotor = new TalonFX(Constants.kShooterLeft, Constants.kRoboRioCANBus);
@@ -93,7 +93,7 @@ public class Shooter extends SubsystemBase {
         for (final TalonFX motor : motors) {
             motor.setControl(
                 voltageRequest
-                    .withOutput(Volts.of(percentOutput * 12.0 *0.4)) //removed 0.4 multiplier
+                    .withOutput(Volts.of(percentOutput * 12.0 *0.4))
             );
         }
     }

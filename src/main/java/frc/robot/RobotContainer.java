@@ -50,18 +50,14 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 import frc.robot.commands.SubsystemCommands;
 import frc.robot.commands.AutoRoutines;
-import frc.robot.commands.ManualDriveCommand;
 
 import frc.robot.subsystems.Feeder;
-import frc.robot.subsystems.Floor;
 import frc.robot.subsystems.Hanger;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Feeder.Speed;
-import frc.util.SwerveTelemetry;
 
 import frc.robot.Constants;
 
@@ -107,10 +103,8 @@ public class RobotContainer {
     
     private DoubleSupplier input = () -> 0.1;
     
-    private final Swerve swerve = new Swerve();
     private final Intake intake = new Intake();
     private final Arm arm = new Arm();
-    private final Floor floor = new Floor();
     private final Feeder feeder = new Feeder();
     private final Shooter shooter = new Shooter();
     private final Hood hood = new Hood();
@@ -118,10 +112,8 @@ public class RobotContainer {
     private final Limelight limelight = new Limelight("limelight");
     
      private final AutoRoutines autoRoutines = new AutoRoutines(
-        swerve,
         drivetrain,
         intake,
-        floor,
         feeder,
         shooter,
         hood,
@@ -130,10 +122,8 @@ public class RobotContainer {
         limelight
     );
     private final SubsystemCommands subsystemCommands = new SubsystemCommands(
-        swerve,
         drivetrain,
         intake,
-        floor,
         feeder,
         shooter,
         hood,
@@ -312,7 +302,18 @@ public class RobotContainer {
     //     );
     // }
 
+    public Command simpleAuto(){
+        return Commands.sequence(
+            arm.downCommand().withTimeout(1.5).andThen(arm.stopCommand()),
+            subsystemCommands.shootAuto(3100).withTimeout(10),
+            subsystemCommands.stopShooter()
+            );
+    }
+
     public Command getAutonomousCommand() {
-        return autoRoutines.getAutoCommand();
+        //return autoRoutines.getAutoCommand();
+
+        //completely bypass choreo
+        return simpleAuto();
     }
 }

@@ -15,7 +15,6 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.Driving;
 import frc.robot.Landmarks;
-import frc.robot.subsystems.Swerve;
 import frc.util.DriveInputSmoother;
 import frc.util.GeometryUtil;
 import frc.util.ManualDriveInput;
@@ -26,7 +25,6 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.util.ShotCalculator.*;
 import frc.util.ProjectileSimulator.*;
 import frc.util.ShotCalculator;
-import frc.robot.Robot.*;
 
 
 
@@ -56,17 +54,13 @@ public class AimAndDriveCommand2 extends Command {
         .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective)
         .withHeadingPID(5, 0, 0);
 
-    public AimAndDriveCommand2(
-       // Swerve swerve,
-        
+    public AimAndDriveCommand2(        
         CommandSwerveDrivetrain drivetrain,
         DoubleSupplier forwardInput,
         DoubleSupplier leftInput
     ) {
-       // this.swerve = swerve;
         this.drivetrain = drivetrain;
         this.inputSmoother = new DriveInputSmoother(forwardInput, leftInput);
-        //addRequirements(swerve);
             addRequirements(drivetrain);
         
 

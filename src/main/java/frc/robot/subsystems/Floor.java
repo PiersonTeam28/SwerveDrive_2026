@@ -70,11 +70,11 @@ public class Floor extends SubsystemBase {
         return startEnd(() -> set(Speed.FEED), () -> set(Speed.STOP));
     }
 
-    @Override
-    public void initSendable(SendableBuilder builder) {
-        builder.addStringProperty("Command", () -> getCurrentCommand() != null ? getCurrentCommand().getName() : "null", null);
-        builder.addDoubleProperty("RPM", () -> motor.getVelocity().getValue().in(RPM), null);
-        builder.addDoubleProperty("Stator Current", () -> motor.getStatorCurrent().getValue().in(Amps), null);
-        builder.addDoubleProperty("Supply Current", () -> motor.getSupplyCurrent().getValue().in(Amps), null);
-    }
+    // @Override
+    // public void initSendable(SendableBuilder builder) {
+    //     builder.addStringProperty("Command", () -> getCurrentCommand() != null ? getCurrentCommand().getName() : "null", null);
+    //     builder.addDoubleProperty("RPM", () -> motor.getVelocity().getValue().in(RPM), null);
+    //     builder.addDoubleProperty("Stator Current", () -> motor.getStatorCurrent().getValue().in(Amps), null);
+    //     builder.addDoubleProperty("Supply Current", () -> motor.getSupplyCurrent().getValue().in(Amps), null);
+    // }
 }

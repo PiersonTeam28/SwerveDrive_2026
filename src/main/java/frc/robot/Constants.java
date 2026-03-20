@@ -27,22 +27,27 @@ public class Constants {
 
     public static final AngularVelocity kPivotRPM = RPM.of(6000);
 
-    public static final double SLOW = 0.50;
+    public static final double SLOW = 0.66;
 
     public static final double SLOW_SHOOT = 0.5;
 
-    public static final double SLOW_HANG = 0.5;
+    public static final double SLOW_HANG = 1;
+
+    public static final double SLOW_INTAKE = 0.5;
+
+    public static final double SLOW_ARM = 0.5;
 
 
     //Constants for current management
     //Shooter KRAKEN
-    public static final double  SHOOT_STATOR = 120;
+    //changed stator to 95 from 120
+    public static final double  SHOOT_STATOR = 95;
     public static final double  SHOOT_SUPPLY = 70;
-    public static final double  SHOOT_LOWER = 55;
+    public static final double  SHOOT_LOWER = 40;
 
     //Feeder Roller KRAKEN
-
-    public static final double  FEED_STATOR = 120;
+    //changed stator for feed and intake to 80, used to be 120
+    public static final double  FEED_STATOR = 80;
     public static final double  FEED_SUPPLY = 50;
     public static final double  FEED_LOWER = 35;
 
@@ -52,7 +57,7 @@ public class Constants {
 
     //Intake 
 
-    public static final double  INTAKE_STATOR = 120;
+    public static final double  INTAKE_STATOR = 80;
     public static final double  INTAKE_SUPPLY = 50;
     public static final double  INTAKE_LOWER = 35;
 

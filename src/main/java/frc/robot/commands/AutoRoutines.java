@@ -20,22 +20,18 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.subsystems.Feeder;
-import frc.robot.subsystems.Floor;
 import frc.robot.subsystems.Hanger;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Arm;
 
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 public final class AutoRoutines {
-    private final Swerve swerve;
     private final CommandSwerveDrivetrain drivetrain;
     private final Intake intake;
-    private final Floor floor;
     private final Feeder feeder;
     private final Shooter shooter;
     private final Hood hood;
@@ -49,10 +45,8 @@ public final class AutoRoutines {
     private final AutoChooser autoChooser;
 
     public AutoRoutines(
-        Swerve swerve,
         CommandSwerveDrivetrain drivetrain,
         Intake intake,
-        Floor floor,
         Feeder feeder,
         Shooter shooter,
         Hood hood,
@@ -60,10 +54,8 @@ public final class AutoRoutines {
         Arm arm,
         Limelight limelight
     ) {
-        this.swerve = swerve;
         this.drivetrain = drivetrain;
         this.intake = intake;
-        this.floor = floor;
         this.feeder = feeder;
         this.shooter = shooter;
         this.hood = hood;
@@ -71,24 +63,25 @@ public final class AutoRoutines {
         this.limelight = limelight;
         this.arm = arm;
 
-        this.subsystemCommands = new SubsystemCommands(swerve, drivetrain, intake, floor, feeder, shooter, hood, hanger, arm);
+        this.subsystemCommands = new SubsystemCommands(drivetrain, intake, feeder, shooter, hood, hanger, arm);
 
         this.autoFactory = drivetrain.createAutoFactory();
         this.autoChooser = new AutoChooser();
     }
 
     public void configure() {
-        autoChooser.addRoutine("Outpost and Depot", this::outpostAndDepotRoutine);
-        autoChooser.addRoutine("TEST", this::test);
-        autoChooser.addRoutine("Shoot Routine", this::shootRoutine);
-        autoChooser.addRoutine("Shoot2", this::shoot2);
-        autoChooser.addRoutine("Shoot3", this::shoot3);
-        autoChooser.addRoutine("Hood Test", this::hoodTest);
-        autoChooser.addRoutine("Hood Test1", this::hoodTest1);
-        autoChooser.addRoutine("RedBumpRight", this::redBumpRight);
-        autoChooser.addRoutine("RedMid", this::redMid);
-        SmartDashboard.putData("Auto Chooser", autoChooser);
-        RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
+        //autoChooser.addRoutine("Outpost and Depot", this::outpostAndDepotRoutine);
+        //autoChooser.addRoutine("TEST", this::test);
+        //autoChooser.addRoutine("Shoot Routine", this::shootRoutine);
+        //autoChooser.addRoutine("Shoot2", this::shoot2);
+        // autoChooser.addRoutine("Shoot3", this::shoot3);
+        // autoChooser.addRoutine("Hood Test", this::hoodTest);
+        // autoChooser.addRoutine("Hood Test1", this::hoodTest1);
+        // autoChooser.addRoutine("RedBumpRight", this::redBumpRight);
+        // autoChooser.addRoutine("RedMid", this::redMid);
+        //autoChooser.addRoutine("Just Shoot", this::justShoot);
+        //SmartDashboard.putData("Auto Chooser", autoChooser);
+        //RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
     }
 
     public AutoChooser getAutoChooser() {
@@ -103,176 +96,176 @@ public final class AutoRoutines {
         return autoChooser.selectedCommand();
     }
 
-    private AutoRoutine outpostAndDepotRoutine() {
-        final AutoRoutine routine = autoFactory.newRoutine("Outpost and Depot");
-        final AutoTrajectory startToOutpost = OutpostAndDepotTrajectory$0.asAutoTraj(routine);
-        final AutoTrajectory outpostToDepot = OutpostAndDepotTrajectory$1.asAutoTraj(routine);
-        final AutoTrajectory depotToShootingPose = OutpostAndDepotTrajectory$2.asAutoTraj(routine);
-        final AutoTrajectory shootingPoseToTower = OutpostAndDepotTrajectory$3.asAutoTraj(routine);
+    // private AutoRoutine outpostAndDepotRoutine() {
+    //     final AutoRoutine routine = autoFactory.newRoutine("Outpost and Depot");
+    //     final AutoTrajectory startToOutpost = OutpostAndDepotTrajectory$0.asAutoTraj(routine);
+    //     final AutoTrajectory outpostToDepot = OutpostAndDepotTrajectory$1.asAutoTraj(routine);
+    //     final AutoTrajectory depotToShootingPose = OutpostAndDepotTrajectory$2.asAutoTraj(routine);
+    //     final AutoTrajectory shootingPoseToTower = OutpostAndDepotTrajectory$3.asAutoTraj(routine);
 
 
-        routine.active().onTrue(
-            Commands.sequence(
-                startToOutpost.resetOdometry(),
-                startToOutpost.cmd()
-            )
-        );
+    //     routine.active().onTrue(
+    //         Commands.sequence(
+    //             startToOutpost.resetOdometry(),
+    //             startToOutpost.cmd()
+    //         )
+    //     );
 
-        routine.observe(hanger::isHomed).onTrue(
-            Commands.sequence(
-                Commands.waitSeconds(0.5)
-                //intake.runOnce(() -> intake.set(Intake.Position.INTAKE.angle().in(Degrees)))
-            )
-        );
+    //     routine.observe(hanger::isHomed).onTrue(
+    //         Commands.sequence(
+    //             Commands.waitSeconds(0.5)
+    //             //intake.runOnce(() -> intake.set(Intake.Position.INTAKE.angle().in(Degrees)))
+    //         )
+    //     );
 
-        startToOutpost.doneDelayed(1).onTrue(outpostToDepot.cmd());
+    //     startToOutpost.doneDelayed(1).onTrue(outpostToDepot.cmd());
 
-        outpostToDepot.atTimeBeforeEnd(1).onTrue(intake.intakeCommand());
-        outpostToDepot.doneDelayed(0.1).onTrue(depotToShootingPose.cmd());
+    //     outpostToDepot.atTimeBeforeEnd(1).onTrue(intake.intakeCommand());
+    //     outpostToDepot.doneDelayed(0.1).onTrue(depotToShootingPose.cmd());
 
-        depotToShootingPose.active().whileTrue(limelight.idle());
-        depotToShootingPose.atTime(0.5).onTrue(
-            Commands.parallel(
-                shooter.spinUpCommand(2600),
-                hood.positionCommand(0.32)
-            )
-        );
-        depotToShootingPose.done().onTrue(
-            Commands.sequence(
-                subsystemCommands.aimAndShoot()
-                    .withTimeout(5),
-                shootingPoseToTower.cmd()
-            )
-        );
+    //     depotToShootingPose.active().whileTrue(limelight.idle());
+    //     depotToShootingPose.atTime(0.5).onTrue(
+    //         Commands.parallel(
+    //             shooter.spinUpCommand(2600),
+    //             hood.positionCommand(0.32)
+    //         )
+    //     );
+    //     depotToShootingPose.done().onTrue(
+    //         Commands.sequence(
+    //             subsystemCommands.aimAndShoot()
+    //                 .withTimeout(5),
+    //             shootingPoseToTower.cmd()
+    //         )
+    //     );
 
-        shootingPoseToTower.active().whileTrue(limelight.idle());
-        shootingPoseToTower.active().onTrue(hanger.positionCommand(Hanger.Position.HANGING));
-        shootingPoseToTower.done().onTrue(hanger.positionCommand(Hanger.Position.HUNG));
+    //     shootingPoseToTower.active().whileTrue(limelight.idle());
+    //     shootingPoseToTower.active().onTrue(hanger.positionCommand(Hanger.Position.HANGING));
+    //     shootingPoseToTower.done().onTrue(hanger.positionCommand(Hanger.Position.HUNG));
 
-        return routine;
-    }
+    //     return routine;
+    // }
 
-    public AutoRoutine shootRoutine() {
-        final AutoRoutine routine = autoFactory.newRoutine("ShootRoutine");
-        final AutoTrajectory shootTrajectory = routine.trajectory("ShootRoutine");
+    // public AutoRoutine shootRoutine() {
+    //     final AutoRoutine routine = autoFactory.newRoutine("ShootRoutine");
+    //     final AutoTrajectory shootTrajectory = routine.trajectory("ShootRoutine");
 
-        routine.active().onTrue(
-            Commands.sequence(
-                shootTrajectory.resetOdometry(),
-                shootTrajectory.cmd()
-            )
-        );
+    //     routine.active().onTrue(
+    //         Commands.sequence(
+    //             shootTrajectory.resetOdometry(),
+    //             shootTrajectory.cmd()
+    //         )
+    //     );
 
-        shootTrajectory.active().whileTrue(limelight.idle());
+    //     shootTrajectory.active().whileTrue(limelight.idle());
 
-        shootTrajectory.atTime(0.5).onTrue(
-            Commands.parallel(
-                shooter.spinUpCommand(2600),
-                hood.positionCommand(0.32)
-            )
-        );
-        shootTrajectory.atTime("Shoot").onTrue(
-            Commands.sequence(
-                subsystemCommands.shootManually()
-                    .withTimeout(5)
-            )
-        );
-        //shootTrajectory.atTime("Shoot").onTrue(subsystemCommands.aimAndShoot2().withTimeout(5));
+    //     shootTrajectory.atTime(0.5).onTrue(
+    //         Commands.parallel(
+    //             shooter.spinUpCommand(2600),
+    //             hood.positionCommand(0.32)
+    //         )
+    //     );
+    //     shootTrajectory.atTime("Shoot").onTrue(
+    //         Commands.sequence(
+    //             subsystemCommands.shootManually()
+    //                 .withTimeout(5)
+    //         )
+    //     );
+    //     //shootTrajectory.atTime("Shoot").onTrue(subsystemCommands.aimAndShoot2().withTimeout(5));
         
-        return routine;
-    }
+    //     return routine;
+    // }
 
-    public AutoRoutine shoot2() {
-        final AutoRoutine routine = autoFactory.newRoutine("Shoot2");
-        final AutoTrajectory shootTrajectory = routine.trajectory("Shoot2");
+    // public AutoRoutine shoot2() {
+    //     final AutoRoutine routine = autoFactory.newRoutine("Shoot2");
+    //     final AutoTrajectory shootTrajectory = routine.trajectory("Shoot2");
 
-        routine.active().onTrue(
-            Commands.sequence(
-                shootTrajectory.resetOdometry(),
-                shootTrajectory.cmd()
-            )
-        );
+    //     routine.active().onTrue(
+    //         Commands.sequence(
+    //             shootTrajectory.resetOdometry(),
+    //             shootTrajectory.cmd()
+    //         )
+    //     );
 
-        shootTrajectory.active().whileTrue(limelight.idle());
+    //     shootTrajectory.active().whileTrue(limelight.idle());
 
-        shootTrajectory.atTime(0.5).onTrue(
-            Commands.parallel(
-                shooter.spinUpCommand(2600),
-                hood.positionCommand(0.3)
-            )
-        );
-        shootTrajectory.atTime("Shoot").onTrue(
-            Commands.sequence(
-                subsystemCommands.aimAndShoot2()
-                    .withTimeout(5)
-            )
-        );
+    //     shootTrajectory.atTime(0.5).onTrue(
+    //         Commands.parallel(
+    //             shooter.spinUpCommand(2600),
+    //             hood.positionCommand(0.3)
+    //         )
+    //     );
+    //     shootTrajectory.atTime("Shoot").onTrue(
+    //         Commands.sequence(
+    //             subsystemCommands.aimAndShoot2()
+    //                 .withTimeout(5)
+    //         )
+    //     );
 
-        return routine;
-    }
+    //     return routine;
+    // }
 
-    public AutoRoutine shoot3() {
-        final AutoRoutine routine = autoFactory.newRoutine("Shoot3");
-        final AutoTrajectory shootTrajectory = routine.trajectory("Shoot3");
+    // public AutoRoutine shoot3() {
+    //     final AutoRoutine routine = autoFactory.newRoutine("Shoot3");
+    //     final AutoTrajectory shootTrajectory = routine.trajectory("Shoot3");
 
-        routine.active().onTrue(
-            Commands.sequence(
-                shootTrajectory.resetOdometry(),
-                shootTrajectory.cmd()
-            )
-        );
+    //     routine.active().onTrue(
+    //         Commands.sequence(
+    //             shootTrajectory.resetOdometry(),
+    //             shootTrajectory.cmd()
+    //         )
+    //     );
 
-        shootTrajectory.active().whileTrue(limelight.idle());
+    //     shootTrajectory.active().whileTrue(limelight.idle());
 
-        shootTrajectory.atTime(0.5).onTrue(
-            Commands.parallel(
-                shooter.spinUpCommand(2600),
-                hood.positionCommand(0.4)
-            )
-        );
-        shootTrajectory.atTime("Shoot").onTrue(
-            Commands.sequence(
-                subsystemCommands.aimAndShoot2()
-                    .withTimeout(5)
-            )
-        );
+    //     shootTrajectory.atTime(0.5).onTrue(
+    //         Commands.parallel(
+    //             shooter.spinUpCommand(2600),
+    //             hood.positionCommand(0.4)
+    //         )
+    //     );
+    //     shootTrajectory.atTime("Shoot").onTrue(
+    //         Commands.sequence(
+    //             subsystemCommands.aimAndShoot2()
+    //                 .withTimeout(5)
+    //         )
+    //     );
 
-        shootTrajectory.atTime("Finish Shoot").onTrue(Commands.print("Finish"));
+    //     shootTrajectory.atTime("Finish Shoot").onTrue(Commands.print("Finish"));
 
-        return routine;
-    }
+    //     return routine;
+    // }
 
-    public AutoRoutine test() {
-        final AutoRoutine routine = autoFactory.newRoutine("TEST");
-        final AutoTrajectory testTrajectory = routine.trajectory("TEST");
+    // public AutoRoutine test() {
+    //     final AutoRoutine routine = autoFactory.newRoutine("TEST");
+    //     final AutoTrajectory testTrajectory = routine.trajectory("TEST");
 
-        routine.active().onTrue(
-            testTrajectory.resetOdometry()
-            .andThen(testTrajectory.cmd())
-        );
+    //     routine.active().onTrue(
+    //         testTrajectory.resetOdometry()
+    //         .andThen(testTrajectory.cmd())
+    //     );
 
-        return routine;
-    }
+    //     return routine;
+    // }
 
-    public AutoRoutine hoodTest() {
-            final AutoRoutine routine = autoFactory.newRoutine("Hood Test");
+    // public AutoRoutine hoodTest() {
+    //         final AutoRoutine routine = autoFactory.newRoutine("Hood Test");
     
-            routine.active().onTrue(
-                hood.positionCommand(0.1).andThen(Commands.waitSeconds(1)).andThen(hood.positionCommand(0.5)).andThen(Commands.waitSeconds(1)).andThen(hood.positionCommand(0.3))
-            );
+    //         routine.active().onTrue(
+    //             hood.positionCommand(0.1).andThen(Commands.waitSeconds(1)).andThen(hood.positionCommand(0.5)).andThen(Commands.waitSeconds(1)).andThen(hood.positionCommand(0.3))
+    //         );
     
-            return routine;
-    }
+    //         return routine;
+    // }
 
-    public AutoRoutine hoodTest1() {
-            final AutoRoutine routine = autoFactory.newRoutine("Hood Test1");
+    // public AutoRoutine hoodTest1() {
+    //         final AutoRoutine routine = autoFactory.newRoutine("Hood Test1");
     
-            routine.active().onTrue(
-                hood.goToMinR().andThen(hood.goToMaxR(), hood.goToMinL(), hood.goToMaxL(), Commands.print("Done"))
-            );
+    //         routine.active().onTrue(
+    //             hood.goToMinR().andThen(hood.goToMaxR(), hood.goToMinL(), hood.goToMaxL(), Commands.print("Done"))
+    //         );
     
-            return routine;
-    }
+    //         return routine;
+    // }
 
     public AutoRoutine redBumpRight(){
         final AutoRoutine routine = autoFactory.newRoutine("RedBumpRight");
@@ -317,6 +310,19 @@ public final class AutoRoutines {
         //redMidTraj.done(subsystemCommands.stopShooter());
 
 
+        return routine;
+    }
+
+    public AutoRoutine justShoot(){
+        
+        final AutoRoutine routine = autoFactory.newRoutine("Just Shoot");
+
+        
+        // activate shoot for 10 seconds and then stop
+        routine.active().onTrue(
+            Commands.sequence(arm.downCommand().withTimeout(1).andThen(arm.stopCommand()), subsystemCommands.shootAuto(3100).withTimeout(5), subsystemCommands.stopShooter())
+        );
+        
         return routine;
     }
 

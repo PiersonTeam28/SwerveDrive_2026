@@ -6,9 +6,9 @@ package frc.robot;
 
 import com.ctre.phoenix6.HootAutoReplay;
 
-import frc.util.ProjectileSimulator;
-import frc.util.ProjectileSimulator.GeneratedLUT;
-import frc.util.ProjectileSimulator.LUTEntry;
+//import frc.util.ProjectileSimulator;
+//import frc.util.ProjectileSimulator.GeneratedLUT;
+//import frc.util.ProjectileSimulator.LUTEntry;
 
 import frc.robot.Constants;
 
@@ -20,8 +20,8 @@ public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
 
     private final RobotContainer m_robotContainer;
-    private final ProjectileSimulator pSim;
-    public GeneratedLUT lut;
+    //private final ProjectileSimulator pSim;
+    //public GeneratedLUT lut;
     //private ProjectileSimulator.SimParameters params;
 
     /* log and replay timestamp and joystick data */
@@ -32,16 +32,16 @@ public class Robot extends TimedRobot {
     public Robot() {
         m_robotContainer = new RobotContainer();
         //params = new SimParameters(Constants.BALL_MASS, Constants.BALL_DIAMETER, Constants.DRAG_COEFF, Constants.MAGNUS_COEFF, Constants.AIR_DENSITY, Constants.EXIT_HEIGHT, Constants.WHEEL_DIAMETER, Constants.TARGET_HEIGHT, Constants.SLIP_FACTOR, Constants.LAUNCH_ANGLE, Constants.SIM_TIMESTEP, Constants.MIN_RPM, Constants.MAX_RPM, Constants.SEARCH_ITERS, Constants.MAX_SIM_TIME);
-        pSim = new ProjectileSimulator(new ProjectileSimulator.SimParameters(Constants.BALL_MASS, Constants.BALL_DIAMETER, Constants.DRAG_COEFF, Constants.MAGNUS_COEFF, Constants.AIR_DENSITY, Constants.EXIT_HEIGHT, Constants.WHEEL_DIAMETER, Constants.TARGET_HEIGHT, Constants.SLIP_FACTOR, Constants.LAUNCH_ANGLE, Constants.SIM_TIMESTEP, Constants.MIN_RPM, Constants.MAX_RPM, Constants.SEARCH_ITERS, Constants.MAX_SIM_TIME));
+        //pSim = new ProjectileSimulator(new ProjectileSimulator.SimParameters(Constants.BALL_MASS, Constants.BALL_DIAMETER, Constants.DRAG_COEFF, Constants.MAGNUS_COEFF, Constants.AIR_DENSITY, Constants.EXIT_HEIGHT, Constants.WHEEL_DIAMETER, Constants.TARGET_HEIGHT, Constants.SLIP_FACTOR, Constants.LAUNCH_ANGLE, Constants.SIM_TIMESTEP, Constants.MIN_RPM, Constants.MAX_RPM, Constants.SEARCH_ITERS, Constants.MAX_SIM_TIME));
 
-        lut = pSim.generateLUT();
+        //lut = pSim.generateLUT();
 
-        for (LUTEntry entry : lut.entries()) {
-        if (entry.reachable()) {
-            System.out.printf("%.2fm -> %.0f RPM, %.3fs TOF%n",
-                entry.distanceM(), entry.rpm(), entry.tof());
-        }
-    }
+    //     for (LUTEntry entry : lut.entries()) {
+    //     if (entry.reachable()) {
+    //         System.out.printf("%.2fm -> %.0f RPM, %.3fs TOF%n",
+    //             entry.distanceM(), entry.rpm(), entry.tof());
+    //     }
+    // }
     }
 
     
