@@ -7,12 +7,10 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.*;
 
 import frc.robot.subsystems.Feeder;
-import frc.robot.subsystems.Floor;
 import frc.robot.subsystems.Hanger;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Swerve;
 import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.Arm;
 
@@ -21,10 +19,8 @@ import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 public final class SubsystemCommands {
-    private final Swerve swerve;
     private final CommandSwerveDrivetrain drivetrain;
     private final Intake intake;
-    private final Floor floor;
     private final Feeder feeder;
     private final Shooter shooter;
     private final Hood hood;
@@ -34,10 +30,8 @@ public final class SubsystemCommands {
     private final DoubleSupplier leftInput;
 
     public SubsystemCommands(
-        Swerve swerve,
         CommandSwerveDrivetrain drivetrain,
         Intake intake,
-        Floor floor,
         Feeder feeder,
         Shooter shooter,
         Hood hood,
@@ -48,10 +42,8 @@ public final class SubsystemCommands {
         DoubleSupplier forwardInput,
         DoubleSupplier leftInput
     ) {
-        this.swerve = swerve;
         this.drivetrain = drivetrain;
         this.intake = intake;
-        this.floor = floor;
         this.feeder = feeder;
         this.shooter = shooter;
         this.hood = hood;
@@ -63,10 +55,8 @@ public final class SubsystemCommands {
     }
 
     public SubsystemCommands(
-        Swerve swerve,
         CommandSwerveDrivetrain drivetrain,
         Intake intake,
-        Floor floor,
         Feeder feeder,
         Shooter shooter,
         Hood hood,
@@ -74,10 +64,8 @@ public final class SubsystemCommands {
         Arm arm
     ) {
         this(
-            swerve,
             drivetrain,
             intake,
-            floor,
             feeder,
             shooter,
             hood,
@@ -88,17 +76,6 @@ public final class SubsystemCommands {
         );
     }
 
-    public Command aimAndShoot() {
-        final AimAndDriveCommand aimAndDriveCommand = new AimAndDriveCommand(swerve, forwardInput, leftInput);
-        final PrepareShotCommand prepareShotCommand = new PrepareShotCommand(shooter, hood, () -> swerve.getState().Pose);
-        return Commands.parallel(
-            aimAndDriveCommand,
-            Commands.waitSeconds(0.25)
-                .andThen(prepareShotCommand),
-            Commands.waitUntil(() -> aimAndDriveCommand.isAimed() && prepareShotCommand.isReadyToShoot())
-                .andThen(feed())
-        );
-    }
 
     public Command aimAndShoot2() {
         final AimAndDriveCommand2 aimAndDriveCommand = new AimAndDriveCommand2(drivetrain, forwardInput, leftInput);
@@ -135,15 +112,4 @@ public final class SubsystemCommands {
             feeder.indexCommand()).handleInterrupt(() -> feeder.stop());
     }
 
-    // OLD FEED
-    private Command feed() {
-        return Commands.sequence(
-            Commands.waitSeconds(0.25),
-            Commands.parallel(
-                feeder.feedCommand(),
-                Commands.waitSeconds(0.125)
-                    .andThen(floor.feedCommand().alongWith(intake.intakeCommand()))
-            )
-        );
-    }
 }

@@ -155,17 +155,17 @@ public class Feeder extends SubsystemBase {
 
 
 
-    @Override
-    public void initSendable(SendableBuilder builder) {
-        builder.addStringProperty("Command", () -> getCurrentCommand() != null ? getCurrentCommand().getName() : "null", null);
+   // @Override
+   // public void initSendable(SendableBuilder builder) {
+        //builder.addStringProperty("Command", () -> getCurrentCommand() != null ? getCurrentCommand().getName() : "null", null);
         
         
        // builder.addDoubleProperty("L Current", () -> agitatorMotorL.getOutputCurrent(), null);
        // builder.addDoubleProperty("R Current", () -> agitatorMotorR.getOutputCurrent(), null);
        // builder.addDoubleProperty("Agit Speed", () -> agitSpeed, value -> agitSpeed = value);
 
-        builder.addDoubleProperty("RPM", () -> feederMotor.getVelocity().getValue().in(RPM), null);
-        builder.addDoubleProperty("Stator Current", () -> feederMotor.getStatorCurrent().getValue().in(Amps), null);
-        builder.addDoubleProperty("Supply Current", () -> feederMotor.getSupplyCurrent().getValue().in(Amps), null);
-    }
+        //builder.addDoubleProperty("RPM", () -> feederMotor.getVelocity().getValue().in(RPM), null);
+        //builder.addDoubleProperty("Stator Current", () -> feederMotor.getStatorCurrent().getValue().in(Amps), null);
+        //builder.addDoubleProperty("Supply Current", () -> feederMotor.getSupplyCurrent().getValue().in(Amps), null);
+    //}
 }

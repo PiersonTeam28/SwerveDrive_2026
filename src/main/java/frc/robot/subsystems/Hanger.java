@@ -217,11 +217,11 @@ public class Hanger extends SubsystemBase {
         return Inches.of(extensionMeasure.in(Inches)); // Promote from Measure<DistanceUnit> to Distance
     }
 
-    @Override
-    public void initSendable(SendableBuilder builder) {
-        builder.addStringProperty("Command", () -> getCurrentCommand() != null ? getCurrentCommand().getName() : "null", null);
-        builder.addDoubleProperty("Hang Alt Encoder", () -> hang.getAlternateEncoder().getPosition(), null);
-        //builder.addDoubleProperty("Extension (inches)", () -> motorAngleToExtension(motor.getPosition().getValue()).in(Inches), null);
-        //builder.addDoubleProperty("Supply Current", () -> motor.getSupplyCurrent().getValue().in(Amps), null);
-    }
+    // @Override
+    // public void initSendable(SendableBuilder builder) {
+    //     builder.addStringProperty("Command", () -> getCurrentCommand() != null ? getCurrentCommand().getName() : "null", null);
+    //     builder.addDoubleProperty("Hang Alt Encoder", () -> hang.getAlternateEncoder().getPosition(), null);
+    //     //builder.addDoubleProperty("Extension (inches)", () -> motorAngleToExtension(motor.getPosition().getValue()).in(Inches), null);
+    //     //builder.addDoubleProperty("Supply Current", () -> motor.getSupplyCurrent().getValue().in(Amps), null);
+    // }
 }

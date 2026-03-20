@@ -64,7 +64,7 @@ public class PrepareShotCommand extends Command {
         final Shot shot = distanceToShotMap.get(distanceToHub);
         shooter.setRPM(shot.shooterRPM);
         hood.setPosition(shot.hoodPosition);
-        SmartDashboard.putNumber("Distance to Hub (inches)", distanceToHub.in(Inches));
+        //SmartDashboard.putNumber("Distance to Hub (inches)", distanceToHub.in(Inches));
     }
 
     @Override

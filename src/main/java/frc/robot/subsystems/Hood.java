@@ -62,55 +62,55 @@ public class Hood extends SubsystemBase {
         targetPosition = clampedPosition;
     }
 
-    public void enableDeadbandElimination(boolean isEnabled) {
-        leftServo.enableDeadbandElimination(isEnabled);
-        rightServo.enableDeadbandElimination(isEnabled);
-    }
+    // public void enableDeadbandElimination(boolean isEnabled) {
+    //     leftServo.enableDeadbandElimination(isEnabled);
+    //     rightServo.enableDeadbandElimination(isEnabled);
+    // }
 
-    public void disableServo() {
-        leftServo.setDisabled();
-        rightServo.setDisabled();
-    }
+    // public void disableServo() {
+    //     leftServo.setDisabled();
+    //     rightServo.setDisabled();
+    // }
 
-    public void zeroLatch() {
-        leftServo.setZeroLatch();
-        rightServo.setZeroLatch();
-    }
+    // public void zeroLatch() {
+    //     leftServo.setZeroLatch();
+    //     rightServo.setZeroLatch();
+    // }
 
-    public void setHighMode() {
+    // public void setHighMode() {
         
-        leftServo.setAlwaysHighMode();
-        rightServo.setAlwaysHighMode();
+    //     leftServo.setAlwaysHighMode();
+    //     rightServo.setAlwaysHighMode();
            
-    }
+    // }
 
-    public int getRightPulseTime() {
-        return rightServo.getPulseTimeMicroseconds();
-    }
+    // public int getRightPulseTime() {
+    //     return rightServo.getPulseTimeMicroseconds();
+    // }
 
-    public int getLeftPulseTime() {
-        return leftServo.getPulseTimeMicroseconds();
-    }
+    // public int getLeftPulseTime() {
+    //     return leftServo.getPulseTimeMicroseconds();
+    // }
 
-    public void setPosR(double pos) {
-        //leftServo.set(pos);
-        rightServo.set(pos);
-    }
+    // public void setPosR(double pos) {
+    //     //leftServo.set(pos);
+    //     rightServo.set(pos);
+    // }
 
-    public void setPosL(double pos) {
-        leftServo.set(pos);
-        //rightServo.set(pos);
-    }
+    // public void setPosL(double pos) {
+    //     leftServo.set(pos);
+    //     //rightServo.set(pos);
+    // }
 
-    public void setAngle(double angle) {
-        // Assuming the angle range corresponds to the position range linearly
-        leftServo.setAngle(angle);
-        rightServo.setAngle(angle);
-    }
+    // public void setAngle(double angle) {
+    //     // Assuming the angle range corresponds to the position range linearly
+    //     leftServo.setAngle(angle);
+    //     rightServo.setAngle(angle);
+    // }
 
-    public Command angleCommand(double angle) {
-        return runOnce(() -> setAngle(angle));
-    }
+    // public Command angleCommand(double angle) {
+    //     return runOnce(() -> setAngle(angle));
+    // }
 
     
 
@@ -120,29 +120,29 @@ public class Hood extends SubsystemBase {
             .andThen(Commands.waitUntil(this::isPositionWithinTolerance));
     }
 
-    public Command goToMinR() {
-        return runOnce(()-> setPosR(0.0));
-    }
+    // public Command goToMinR() {
+    //     return runOnce(()-> setPosR(0.0));
+    // }
 
-     public Command goToMinL() {
-        return runOnce(()-> setPosL(0.0));
-    }
+    //  public Command goToMinL() {
+    //     return runOnce(()-> setPosL(0.0));
+    // }
 
-    public Command goToMaxR() {
-        return runOnce(()-> setPosR(1.0));
-    }
+    // public Command goToMaxR() {
+    //     return runOnce(()-> setPosR(1.0));
+    // }
 
-    public Command goToMaxL() {
-        return runOnce(()-> setPosL(1.0));
-    }
+    // public Command goToMaxL() {
+    //     return runOnce(()-> setPosL(1.0));
+    // }
 
-    public Command posCommandL(double pos){
-        return runOnce(()-> setPosL(pos));
-    }
+    // public Command posCommandL(double pos){
+    //     return runOnce(()-> setPosL(pos));
+    // }
 
-    public Command posCommandR(double pos){
-        return runOnce(()-> setPosR(pos));
-    }
+    // public Command posCommandR(double pos){
+    //     return runOnce(()-> setPosR(pos));
+    // }
 
      
 
@@ -174,16 +174,16 @@ public class Hood extends SubsystemBase {
         updateCurrentPosition();
     }
 
-     @Override
-    public void initSendable(SendableBuilder builder) {
-        builder.addStringProperty("Command", () -> getCurrentCommand() != null ? getCurrentCommand().getName() : "null", null);
-        builder.addDoubleProperty("Current Position", () -> currentPosition, null);
-        builder.addDoubleProperty("Target Position", () -> targetPosition, value -> setPosition(value));
-       // builder.addDoubleProperty("Right Hood Position", () -> rightServo.getPosition(), null);
-       // builder.addDoubleProperty("Left Hood Position", () -> leftServo.getPosition(), null);
-        //builder.addDoubleProperty("Right Speed?", () -> rightServo.getSpeed(), null);
-       // builder.addDoubleProperty("Left Speed?", () -> leftServo.getSpeed(), null);
-       // builder.addStringProperty("R Get String", () -> rightServo.toString(), null);
-        //builder.addBooleanProperty("Is Position Within Tolerance", () -> this.isPositionWithinTolerance(), null);
-    }
+    //  @Override
+    // public void initSendable(SendableBuilder builder) {
+    //     builder.addStringProperty("Command", () -> getCurrentCommand() != null ? getCurrentCommand().getName() : "null", null);
+    //     builder.addDoubleProperty("Current Position", () -> currentPosition, null);
+    //     builder.addDoubleProperty("Target Position", () -> targetPosition, value -> setPosition(value));
+    //    // builder.addDoubleProperty("Right Hood Position", () -> rightServo.getPosition(), null);
+    //    // builder.addDoubleProperty("Left Hood Position", () -> leftServo.getPosition(), null);
+    //     //builder.addDoubleProperty("Right Speed?", () -> rightServo.getSpeed(), null);
+    //    // builder.addDoubleProperty("Left Speed?", () -> leftServo.getSpeed(), null);
+    //    // builder.addStringProperty("R Get String", () -> rightServo.toString(), null);
+    //     //builder.addBooleanProperty("Is Position Within Tolerance", () -> this.isPositionWithinTolerance(), null);
+    // }
 }
