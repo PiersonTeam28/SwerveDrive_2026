@@ -269,12 +269,12 @@ public class Arm extends SubsystemBase {
    
     @Override
     public void initSendable(SendableBuilder builder) {
-        builder.addStringProperty("Command", () -> getCurrentCommand() != null ? getCurrentCommand().getName() : "null", null);
+        //builder.addStringProperty("Command", () -> getCurrentCommand() != null ? getCurrentCommand().getName() : "null", null);
 
         // builder.addDoubleProperty("Angle (degrees)", () -> pivotMotor.getPosition().getValue().in(Degrees), null);
 
         builder.addDoubleProperty("Alt Encoder Position", () -> pivot.getAlternateEncoder().getPosition(), null);
-        builder.addDoubleProperty("Difference", () -> this.getDifference(), null);
+        //builder.addDoubleProperty("Difference", () -> this.getDifference(), null);
         builder.addDoubleProperty("Set Upper Limit", null, value -> setHigh(value));
         builder.addDoubleProperty("Set Lower Limit", null, value -> setLow(value));
 
@@ -286,23 +286,11 @@ public class Arm extends SubsystemBase {
         builder.addBooleanProperty("Lower Limit", () -> lowerLimit(), null);
 
            // builder.addDoubleProperty("Angle (degrees)", () -> Degrees.of(pivot.getAbsoluteEncoder().getPosition()).in(Degrees), null);
-            builder.addDoubleProperty("Target Angle (degrees)", () -> pivotController.getMAXMotionSetpointPosition(), null);
+            //builder.addDoubleProperty("Target Angle (degrees)", () -> pivotController.getMAXMotionSetpointPosition(), null);
 
-            builder.addDoubleProperty("kP", null, value -> {
-                kP = value;
-            });
-
-             builder.addDoubleProperty("kI", null, value -> {
-                kI = value;
-
-            });
-
-              builder.addDoubleProperty("kD", null, value -> {
-                kD = value;
-            });
-
+            
        
-        builder.addDoubleProperty("Pivot Supply Current", () -> pivot.getOutputCurrent(), null);
+        //builder.addDoubleProperty("Pivot Supply Current", () -> pivot.getOutputCurrent(), null);
 
 
     }

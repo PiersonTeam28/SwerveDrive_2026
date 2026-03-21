@@ -171,7 +171,7 @@ public class Constants {
     public static final CANBus kCANivoreCANBus = new CANBus("main");
 
    
-    public static final int kIntakePivot = 29; //SPARK
+    public static final int kIntakePivot = 29; //SPARK (the arm)
 
     public static final int kIntakeRollers = 5;
     public static final int kFloor = 12;
